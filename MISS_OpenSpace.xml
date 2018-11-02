@@ -1,0 +1,70 @@
+<mission_data>
+	<!-- Author: David Trinh, October 2018 -->
+	<!-- email: a1on5678@tsn-artemis.ca  -->
+	<!-- MIT License -->
+
+	<!-- Copyright (c) 2018 David Trinh -->
+
+	<!-- Permission is hereby granted, free of charge, to any person obtaining a copy -->
+	<!-- of this software and associated documentation files (the "Software"), to deal -->
+	<!-- in the Software without restriction, including without limitation the rights -->
+	<!-- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell -->
+	<!-- copies of the Software, and to permit persons to whom the Software is -->
+	<!-- furnished to do so, subject to the following conditions: -->
+
+	<!-- The above copyright notice and this permission notice shall be included in all -->
+	<!-- copies or substantial portions of the Software. -->
+
+	<!-- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR -->
+	<!-- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, -->
+	<!-- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE -->
+	<!-- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER -->
+	<!-- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, -->
+	<!-- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE -->
+	<!-- SOFTWARE. -->
+
+
+	<start>
+		<create type="player"  x="90000" y="0" z="50000" angle="270" name="Artemis"/>
+		<set_variable name="x" value="0" integer="yes"/>
+        <set_variable name="z" value="0" integer="yes"/> 
+		
+	</start>
+  
+	<event name_arme="PositionLeftX">
+	 <if_object_property name="Artemis" property="positionX" comparator="GREATER" value="99990"/>
+	 <set_object_property property="positionX" name="Artemis" value="100"/>
+	 <set_variable name="x" value="x-1" />
+	 <set_variable name="RandomA" randomIntLow="10" randomIntHigh="100000" integer="yes" />
+     <set_variable name="RandomB" randomIntLow="10" randomIntHigh="100000" integer="yes" />
+	 <incoming_comms_text from="DSTAN AND ONBOARD NAVIGATION">Current position (|x|.|RandomA|, |z|.|RandomB|)</incoming_comms_text>
+	</event>
+	
+	<event name_arme="PositionBottomZ">
+	 <if_object_property name="Artemis" property="positionZ" comparator="GREATER" value="99990"/>
+	 <set_object_property property="positionZ" name="Artemis" value="100"/>
+	 <set_variable name="z" value="z-1" />
+	 <set_variable name="RandomA" randomIntLow="10" randomIntHigh="100000" integer="yes" />
+     <set_variable name="RandomB" randomIntLow="10" randomIntHigh="100000" integer="yes" />
+	 <incoming_comms_text from="DSTAN AND ONBOARD NAVIGATION">Current position (|x|.|RandomA|, |z|.|RandomB|)</incoming_comms_text>
+	</event>
+
+	<event name_arme="PositionRightX">
+	 <if_object_property name="Artemis" property="positionX" comparator="LESS" value="10"/>
+	 <set_object_property property="positionX" name="Artemis" value="99900"/>
+	 <set_variable name="x" value="x+1" />
+	 <set_variable name="RandomA" randomIntLow="10" randomIntHigh="100000" integer="yes" />
+     <set_variable name="RandomB" randomIntLow="10" randomIntHigh="100000" integer="yes" />
+	 <incoming_comms_text from="DSTAN AND ONBOARD NAVIGATION">Current position (|x|.|RandomA|, |z|.|RandomB|)</incoming_comms_text>
+	</event>
+
+	<event name_arme="PositionTopZ">
+	 <if_object_property name="Artemis" property="positionZ" comparator="LESS" value="10"/>
+	 <set_object_property property="positionZ" name="Artemis" value="99900"/>
+	 <set_variable name="z" value="z+1" />	 
+	 <set_variable name="RandomA" randomIntLow="10" randomIntHigh="100000" integer="yes" />
+     <set_variable name="RandomB" randomIntLow="10" randomIntHigh="100000" integer="yes" />
+	 <incoming_comms_text from="DSTAN AND ONBOARD NAVIGATION">Current position (|x|.|RandomA|, |z|.|RandomB|)</incoming_comms_text>
+	</event>
+
+</mission_data>
