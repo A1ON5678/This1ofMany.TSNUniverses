@@ -1,70 +1,566 @@
+<!-- Author: David Trinh, November 7, 2018 -->
+<!-- email: a1on5678@tsn-artemis.ca  -->
+<!-- MIT License -->
+
+<!-- Copyright (c) 2018 David Trinh -->
+
+<!-- Permission is hereby granted, free of charge, to any person obtaining a copy -->
+<!-- of this software and associated documentation files (the "Software"), to deal -->
+<!-- in the Software without restriction, including without limitation the rights -->
+<!-- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell -->
+<!-- copies of the Software, and to permit persons to whom the Software is -->
+<!-- furnished to do so, subject to the following conditions: -->
+
+<!-- The above copyright notice and this permission notice shall be included in all -->
+<!-- copies or substantial portions of the Software. -->
+
+<!-- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR -->
+<!-- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, -->
+<!-- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE -->
+<!-- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER -->
+<!-- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, -->
+<!-- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE -->
+<!-- SOFTWARE. -->
+
+	<!-- SECTOR SUMMARY-->
+	<!-- Sector (0,0): -->
+	<!-- Command Base with nebulas and asteroids. -->
+
+	<!-- Sector (1,0), (1,1), (-1,0), (-1,-1): -->
+	<!-- Nebulas and asteroids. -->
+
+	<!-- Sector (2,2): -->
+	<!-- Black holes, anomolies, whales -->
+
+	<!-- Sector (-10,-1): nebulas and asteroids. -->
+
+	<!-- Sector (4,5): pods of whales -->
+
 <mission_data>
-	<!-- Author: David Trinh, October 2018 -->
-	<!-- email: a1on5678@tsn-artemis.ca  -->
-	<!-- MIT License -->
-
-	<!-- Copyright (c) 2018 David Trinh -->
-
-	<!-- Permission is hereby granted, free of charge, to any person obtaining a copy -->
-	<!-- of this software and associated documentation files (the "Software"), to deal -->
-	<!-- in the Software without restriction, including without limitation the rights -->
-	<!-- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell -->
-	<!-- copies of the Software, and to permit persons to whom the Software is -->
-	<!-- furnished to do so, subject to the following conditions: -->
-
-	<!-- The above copyright notice and this permission notice shall be included in all -->
-	<!-- copies or substantial portions of the Software. -->
-
-	<!-- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR -->
-	<!-- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, -->
-	<!-- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE -->
-	<!-- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER -->
-	<!-- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, -->
-	<!-- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE -->
-	<!-- SOFTWARE. -->
-
-
 	<start>
-		<create type="player"  x="90000" y="0" z="50000" angle="270" name="Artemis"/>
+		<create type="player"  x="50000" y="0" z="50000" angle="0" name="Artemis"/>
+                <!-- Starting sector -->
 		<set_variable name="x" value="0" integer="yes"/>
-        <set_variable name="z" value="0" integer="yes"/> 
+                <set_variable name="z" value="0" integer="yes"/> 
+		<!-- Sets the flag to create a sector based on the start position -->
+		<set_variable name="IsCreate" value="1" integer="yes"/>
 		
+		<!-- Comms gets a message for current sector location -->
+		<incoming_comms_text from="DSTAN AND ONBOARD NAV">Current position (|x|, |z|)</incoming_comms_text>
+		
+		<!-- Sets the flag to destroy the sector we are leaving, the flag is reset as soon as it is done -->
+		<set_variable name="IsDestroy" value="0" integer="yes"/>
+		<set_variable name="destroy_x" value="0" integer="yes"/>
+                <set_variable name="destroy_z" value="0" integer="yes"/> 
+
 	</start>
-  
-	<event name_arme="PositionLeftX">
-	 <if_object_property name="Artemis" property="positionX" comparator="GREATER" value="99990"/>
-	 <set_object_property property="positionX" name="Artemis" value="100"/>
-	 <set_variable name="x" value="x-1" />
-	 <set_variable name="RandomA" randomIntLow="10" randomIntHigh="100000" integer="yes" />
-     <set_variable name="RandomB" randomIntLow="10" randomIntHigh="100000" integer="yes" />
-	 <incoming_comms_text from="DSTAN AND ONBOARD NAVIGATION">Current position (|x|.|RandomA|, |z|.|RandomB|)</incoming_comms_text>
+
+    <!-- START SECTOR DEFINITION, CREATION AND DESTRUCTION -->
+	<event name_arme="CreateObjectGrid00">
+		<if_variable name="IsCreate" comparator="EQUALS" value="1" />
+		<if_variable name="x" comparator="EQUALS" value="0" />
+		<if_variable name="z" comparator="EQUALS" value="0" />
+		<if_variable name="w_sector_now_x" comparator="EQUALS" value="0" />
+		<if_variable name="w_sector_now_y" comparator="EQUALS" value="0" />		
 	</event>
 	
+	
+    <!-- Sector 0,0 where the create and destroy pattern becomes active when transitioned -->
+	<event name_arme="CreateGrid00">   
+		<if_variable name="IsCreate" comparator="EQUALS" value="1" />
+		<if_variable name="x" comparator="EQUALS" value="0" />
+		<if_variable name="z" comparator="EQUALS" value="0" />
+		<!-- This is where all the objects are created and configured -->
+		<create type ="station" raceKeys="friendly" hullKeys="Command Base" x="50000" y="300" z="50000" name="DS00"/>	
+		
+		<!-- create unnamed objects -->
+		<create count="170" type="nebulas" startX="78834.0" startY="0.0" startZ="12132.0" endX="32761.0" endY="0.0" endZ="44203.0" randomRange="10723" />
+		<create count="20" type="nebulas" startX="30352.0" startY="0.0" startZ="42396.0" endX="30352.0" endY="0.0" endZ="42396.0" randomRange="7449" />
+		<create count="60" type="asteroids" startX="89825.0" startY="0.0" startZ="11380.0" endX="76123.0" endY="0.0" endZ="30953.0" randomRange="5941" />
+		<create count="30" type="asteroids" startX="75822.0" startY="0.0" startZ="28845.0" endX="61067.0" endY="0.0" endZ="38180.0" randomRange="4153" />
+		<create count="10" type="asteroids" startX="61368.0" startY="0.0" startZ="36373.0" endX="57002.0" endY="0.0" endZ="39234.0" randomRange="2381" />
+		<create count="30" type="asteroids" startX="93137.0" startY="0.0" startZ="9422.0" endX="96149.0" endY="0.0" endZ="3099.0" randomRange="2989" />
+		<create count="24" type="asteroids" startX="95396.0" startY="0.0" startZ="12735.0" endX="86964.0" endY="0.0" endZ="16951.0" randomRange="3011" />
+		<create count="52" type="asteroids" startX="70101.0" startY="0.0" startZ="81693.0" endX="65283.0" endY="0.0" endZ="85156.0" randomRange="6858" />
+		<create count="50" type="nebulas" startX="88018.0" startY="0.0" startZ="79585.0" endX="76274.0" endY="0.0" endZ="80338.0" randomRange="5347" />
+		<create count="30" type="asteroids" startX="87265.0" startY="0.0" startZ="76273.0" endX="76575.0" endY="0.0" endZ="81392.0" randomRange="3089" />
+		<create count="60" type="nebulas" startX="11381.0" startY="0.0" startZ="94341.0" endX="16952.0" endY="0.0" endZ="63776.0" randomRange="6057" />
+		<!-- end create unnamed objects -->
+		
+		<set_variable name="IsCreate" value="0" />
+	</event>
+	<event name_arme="DestroyGrid00"> 
+		<if_variable name="IsDestroy" comparator="EQUALS" value="1" />
+		<if_variable name="destroy_x" comparator="EQUALS" value="0" />
+		<if_variable name="destroy_z" comparator="EQUALS" value="0" />
+			<!-- This is where all the objects are destroyed in the sector. -->
+			<destroy name="DS00" />
+
+			<!-- Flag the creation of a new sector if an event name_arme exists. -->
+			<set_variable name="IsDestroy" value="0" />
+			<set_variable name="IsCreate" value="1" />
+	</event>
+	<!-- Thus, ever sector that is defined hereafter, will have a create and destroy pattern which identifies the sector number in the name_arme attributes. The x,z coordinates will reflect that sector. -->
+
+	<!-- Unamed objects will destroy per the destroy command. However, each named object will need be explicitly destroyed one line at a time. -->
+
+	
+    <!-- Sector 1,0 where the create and destroy pattern becomes active when transitioned -->
+	<event name_arme="CreateGrid10">   
+		<if_variable name="IsCreate" comparator="EQUALS" value="1" />
+		<if_variable name="x" comparator="EQUALS" value="1" />
+		<if_variable name="z" comparator="EQUALS" value="0" />
+		<!-- This is where all the objects are created and configured -->
+
+		<!-- create unnamed objects -->
+		<create count="125" type="nebulas" startAngle="251" endAngle="27" startX="33637.0" startY="0.0" startZ="67024.0" radius="18750" randomRange="8125" />
+		<create count="70" type="nebulas" startAngle="31" endAngle="230" startX="38934.0" startY="0.0" startZ="41191.0" radius="10245" randomRange="8050" />
+		<create count="71" type="nebulas" startX="55768.0" startY="0.0" startZ="67991.0" endX="73564.0" endY="0.0" endZ="89974.0" randomRange="8548" />
+		<create count="41" type="nebulas" startX="39085.0" startY="0.0" startZ="42547.0" endX="59110.0" endY="0.0" endZ="69347.0" randomRange="6036" />
+		<create count="71" type="nebulas" startX="53358.0" startY="0.0" startZ="82109.0" endX="51431.0" endY="0.0" endZ="96298.0" randomRange="8548" />
+		<create count="273" type="asteroids" startX="83610.0" startY="0.0" startZ="16887.0" radius="10521" randomRange="9717" />
+		<create count="167" type="asteroids" startX="43224.0" startY="0.0" startZ="8181.0" endX="68182.0" endY="0.0" endZ="7520.0" randomRange="9077" />
+		<create count="70" type="asteroids" startX="88513.0" startY="0.0" startZ="36611.0" endX="99422.0" endY="0.0" endZ="45206.0" randomRange="8817" />
+		<create count="16" type="nebulas" startX="17855.0" startY="0.0" startZ="39385.0" radius="1684" randomRange="1664" />
+		<!-- end create unnamed objects -->
+
+		<set_variable name="IsCreate" value="0" />
+	</event>  
+	
+	<event name_arme="DestroyGrid10"> 
+		<if_variable name="IsDestroy" comparator="EQUALS" value="1" />
+		<if_variable name="destroy_x" comparator="EQUALS" value="1" />
+		<if_variable name="destroy_z" comparator="EQUALS" value="0" />		
+			<!-- This is where all the objects are destroyed in the sector. -->
+			
+			<set_variable name="IsDestroy" value="0" />
+			<set_variable name="IsCreate" value="1" />
+	</event>
+
+	
+	
+	
+    <!-- Sector 1,1 where the create and destroy pattern becomes active when transitioned -->
+	<event name_arme="CreateGrid11">   
+		<if_variable name="IsCreate" comparator="EQUALS" value="1" />
+		<if_variable name="x" comparator="EQUALS" value="1" />
+		<if_variable name="z" comparator="EQUALS" value="1" />
+				
+
+		<!-- create unnamed objects -->
+		<create count="187" type="asteroids" startX="89373.0" startY="0.0" startZ="19811.0" endX="39235.0" endY="0.0" endZ="8218.0" randomRange="10518" />
+		<create count="72" type="asteroids" startX="71757.0" startY="0.0" startZ="93588.0" endX="8068.0" endY="0.0" endZ="62722.0" randomRange="11768" />
+		<create count="92" type="asteroids" startX="28696.0" startY="0.0" startZ="75671.0" endX="4906.0" endY="0.0" endZ="53538.0" randomRange="8054" />
+		<create count="81" type="asteroids" startX="18307.0" startY="0.0" startZ="73563.0" endX="7466.0" endY="0.0" endZ="50828.0" randomRange="6503" />
+		<create count="52" type="asteroids" startX="2497.0" startY="0.0" startZ="39234.0" endX="12886.0" endY="0.0" endZ="63023.0" randomRange="5128" />
+		<create count="94" type="asteroids" startX="61368.0" startY="0.0" startZ="11229.0" endX="42096.0" endY="0.0" endZ="1141.0" randomRange="7761" />
+		<create count="73" type="asteroids" startX="50527.0" startY="0.0" startZ="7917.0" endX="35320.0" endY="0.0" endZ="2797.0" randomRange="5480" />
+		<create count="201" type="nebulas" startX="84706.0" startY="0.0" startZ="68444.0" endX="84706.0" endY="0.0" endZ="68444.0" randomRange="22678" />
+		<create count="138" type="nebulas" startX="96341.0" startY="0.0" startZ="5716.0" endX="89144.0" endY="0.0" endZ="45960.0" randomRange="11915" />
+		<create count="54" type="nebulas" startX="78128.0" startY="0.0" startZ="75630.0" endX="95313.0" endY="0.0" endZ="96780.0" randomRange="12612" />
+		<create count="82" type="nebulas" startAngle="77" endAngle="222" startX="32309.0" startY="0.0" startZ="65734.0" radius="19375" randomRange="9368" />
+		<create count="99" type="nebulas" startX="28244.0" startY="0.0" startZ="89523.0" endX="70931.0" endY="0.0" endZ="94430.0" randomRange="11051" />
+		<create count="50" type="nebulas" startX="4455.0" startY="0.0" startZ="68594.0" endX="8972.0" endY="0.0" endZ="81693.0" randomRange="8734" />		
+		<!-- end create unnamed objects -->	
+
+			
+		<set_variable name="IsCreate" value="0" />
+	</event>  
+	<event name_arme="DestroyGrid11"> 
+		<if_variable name="IsDestroy" comparator="EQUALS" value="1" />
+		<if_variable name="destroy_x" comparator="EQUALS" value="1" />
+		<if_variable name="destroy_z" comparator="EQUALS" value="1" />		
+			
+			<set_variable name="IsDestroy" value="0" />
+			<set_variable name="IsCreate" value="1" />
+	</event>
+
+	
+    <!-- Sector 0,1 where the create and destroy pattern becomes active when transition -->
+	<event name_arme="CreateGrid01">   
+		<if_variable name="IsCreate" comparator="EQUALS" value="1" />
+		<if_variable name="x" comparator="EQUALS" value="0" />
+		<if_variable name="z" comparator="EQUALS" value="1" />
+			
+			<!-- create unnamed objects -->
+			<create count="145" type="asteroids" startX="84254.0" startY="0.0" startZ="45106.0" endX="69800.0" endY="0.0" endZ="86662.0" randomRange="20349" />
+			<create count="49" type="nebulas" startX="86211.0" startY="0.0" startZ="32308.0" endX="84405.0" endY="0.0" endZ="46612.0" randomRange="4491" />
+			<create count="53" type="nebulas" startX="84103.0" startY="0.0" startZ="74466.0" endX="74768.0" endY="0.0" endZ="84855.0" randomRange="5811" />
+			<create count="37" type="nebulas" startX="75220.0" startY="0.0" startZ="2797.0" endX="79737.0" endY="0.0" endZ="9272.0" randomRange="5573" />
+			<create count="67" type="asteroids" startAngle="280" endAngle="154" startX="16540.0" startY="0.0" startZ="15826.0" radius="23003" randomRange="4139" />
+			<create count="42" type="asteroids" startX="34278.0" startY="0.0" startZ="14216.0" endX="31567.0" endY="0.0" endZ="1024.0" randomRange="9218" />
+			<create count="19" type="asteroids" startX="30302.0" startY="0.0" startZ="18373.0" endX="31386.0" endY="0.0" endZ="28855.0" randomRange="2942" />
+			<create count="20" type="asteroids" startX="25422.0" startY="0.0" startZ="27590.0" endX="17470.0" endY="0.0" endZ="32289.0" randomRange="3725" />
+			<create count="71" type="nebulas" startX="18374.0" startY="0.0" startZ="10060.0" endX="13314.0" endY="0.0" endZ="22891.0" randomRange="10307" />
+			<create count="33" type="asteroids" startX="22169.0" startY="0.0" startZ="41686.0" endX="4278.0" endY="0.0" endZ="51084.0" randomRange="7959" />
+			<create count="10" type="asteroids" startX="7531.0" startY="0.0" startZ="37168.0" endX="1928.0" endY="0.0" endZ="38433.0" randomRange="3615" />
+			<!-- end create unnamed objects -->	
+		
+					
+			<set_variable name="IsCreate" value="0" />
+	</event>  
+	<event name_arme="DestroyGrid01"> 
+		<if_variable name="IsDestroy" comparator="EQUALS" value="1" />
+		<if_variable name="destroy_x" comparator="EQUALS" value="0" />
+		<if_variable name="destroy_z" comparator="EQUALS" value="1" />		
+			<set_variable name="IsDestroy" value="0" />
+			<set_variable name="IsCreate" value="1" />
+	</event>
+
+
+	
+    <!-- Sector -1,0 where the create and destroy pattern becomes active when transitioned -->
+	<event name_arme="CreateGrid-10">   
+		<if_variable name="IsCreate" comparator="EQUALS" value="1" />
+		<if_variable name="x" comparator="EQUALS" value="-1" />
+		<if_variable name="z" comparator="EQUALS" value="0" />
+					
+			
+			<!-- create unnamed objects -->
+			<create count="216" type="nebulas" startX="72962.0" startY="0.0" startZ="7164.0" endX="11230.0" endY="0.0" endZ="17553.0" randomRange="13999" />
+			<create count="46" type="asteroids" startX="67993.0" startY="0.0" startZ="7917.0" endX="87566.0" endY="0.0" endZ="13337.0" randomRange="6941" />
+			<create count="97" type="asteroids" startX="63476.0" startY="0.0" startZ="78080.0" endX="39536.0" endY="0.0" endZ="73563.0" randomRange="9096" />
+			<create count="57" type="nebulas" startX="75521.0" startY="0.0" startZ="78080.0" endX="54442.0" endY="0.0" endZ="77478.0" randomRange="10160" />
+			<create count="43" type="asteroids" startX="46462.0" startY="0.0" startZ="44956.0" endX="32610.0" endY="0.0" endZ="39234.0" randomRange="6647" />
+			<create count="32" type="asteroids" startX="44655.0" startY="0.0" startZ="52634.0" endX="37579.0" endY="0.0" endZ="44203.0" randomRange="5939" />
+			<create count="32" type="asteroids" startX="50829.0" startY="0.0" startZ="67089.0" endX="45559.0" endY="0.0" endZ="51430.0" randomRange="6687" />
+			<create count="6" type="asteroids" startX="74919.0" startY="0.0" startZ="7917.0" radius="100" randomRange="550" />
+			<create count="6" type="asteroids" startX="71155.0" startY="0.0" startZ="12885.0" radius="100" randomRange="550" />
+			<create count="6" type="asteroids" startX="77629.0" startY="0.0" startZ="15144.0" radius="100" randomRange="550" />
+			<create count="6" type="asteroids" startX="40289.0" startY="0.0" startZ="39987.0" radius="100" randomRange="550" />
+			<create count="6" type="asteroids" startX="38934.0" startY="0.0" startZ="47515.0" radius="100" randomRange="550" />
+			<create count="6" type="asteroids" startX="45107.0" startY="0.0" startZ="57904.0" radius="100" randomRange="550" />
+			<create count="6" type="asteroids" startX="51431.0" startY="0.0" startZ="67089.0" radius="100" randomRange="550" />
+			<create count="6" type="asteroids" startX="47064.0" startY="0.0" startZ="72358.0" radius="100" randomRange="550" />
+			<create count="6" type="asteroids" startX="56098.0" startY="0.0" startZ="77478.0" radius="100" randomRange="550" />
+			<create count="6" type="asteroids" startX="58507.0" startY="0.0" startZ="70100.0" radius="100" randomRange="550" />			
+			
+			<!-- end create unnamed objects -->	
+			<set_variable name="IsCreate" value="0" />
+	</event>  
+	<event name_arme="DestroyGrid-10"> 
+		<if_variable name="IsDestroy" comparator="EQUALS" value="1" />
+		<if_variable name="destroy_x" comparator="EQUALS" value="-1" />
+		<if_variable name="destroy_z" comparator="EQUALS" value="0" />		
+			<set_variable name="IsDestroy" value="0" />
+			<set_variable name="IsCreate" value="1" />
+	</event>
+
+	
+	
+    <!-- Sector -1,-1 where the create and destroy pattern becomes active when transitioned -->
+	<event name_arme="CreateGrid-1-1">   
+		<if_variable name="IsCreate" comparator="EQUALS" value="1" />
+		<if_variable name="x" comparator="EQUALS" value="-1" />
+		<if_variable name="z" comparator="EQUALS" value="-1" />
+
+
+			<!-- create unnamed objects -->
+			<create count="4" type="asteroids" startAngle="180" endAngle="359" startX="69970.0" startY="-250.0" startZ="56594.0" radius="2000" randomRange="1000" randomSeed="564" />
+			<create count="4" type="asteroids" startAngle="180" endAngle="359" startX="69970.0" startY="250.0" startZ="56594.0" radius="2000" randomRange="1000" randomSeed="4546" />
+			<create count="4" type="asteroids" startAngle="180" endAngle="359" startX="69970.0" startY="0.0" startZ="56594.0" radius="2000" randomRange="1000" randomSeed="1265" />
+			<!-- end create unnamed objects -->	
+			
+			<set_variable name="IsCreate" value="0" />
+	</event>  
+	<event name_arme="DestroyGrid-1-1"> 
+		<if_variable name="IsDestroy" comparator="EQUALS" value="1" />
+		<if_variable name="destroy_x" comparator="EQUALS" value="-1" />
+		<if_variable name="destroy_z" comparator="EQUALS" value="-1" />		
+			
+			<set_variable name="IsDestroy" value="0" />
+			<set_variable name="IsCreate" value="1" />
+	</event>
+	
+
+	
+    <!-- Sector 2,2 where the create and destroy pattern becomes active when transitioned -->
+	<event name_arme="CreateGrid22">   
+		<if_variable name="IsCreate" comparator="EQUALS" value="1" />
+		<if_variable name="x" comparator="EQUALS" value="2" />
+		<if_variable name="z" comparator="EQUALS" value="2" />
+		<!-- This is where all the objects are created and configured -->
+			<create type="blackHole" x="60435.0" y="0.0" z="27135.0" name="BH2-085" />
+			<create type="blackHole" x="71330.0" y="0.0" z="69795.0" name="BH2-315" />	
+			
+		<!-- create unnamed objects -->
+			<create type="anomaly" x="20077.0" y="0.0" z="22992.0" />
+			<create type="anomaly" x="27903.0" y="0.0" z="22685.0" />
+			<create type="anomaly" x="11944.0" y="0.0" z="20383.0" />
+			<create type="anomaly" x="87750.0" y="0.0" z="21611.0" />
+			
+			<set_variable name="RandomX" randomIntLow="40000" randomIntHigh="60000" />
+			<set_variable name="RandomZ" randomIntLow="46000" randomIntHigh="50000" />
+			<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="0" name="Xeno" podnumber="1" />		
+			<set_variable name="RandomX" randomIntLow="40000" randomIntHigh="60000" />
+			<set_variable name="RandomZ" randomIntLow="46000" randomIntHigh="50000" />
+			<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="0" name="Xeno" podnumber="1" />		
+			<set_variable name="RandomX" randomIntLow="40000" randomIntHigh="60000" />
+			<set_variable name="RandomZ" randomIntLow="46000" randomIntHigh="50000" />
+			<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="0" name="Xeno" podnumber="1" />		
+			<set_variable name="RandomX" randomIntLow="40000" randomIntHigh="60000" />
+			<set_variable name="RandomZ" randomIntLow="46000" randomIntHigh="50000" />
+			<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="0" name="Xeno" podnumber="1" />				
+			
+			<set_variable name="RandomX" randomIntLow="90000" randomIntHigh="99000" />
+			<set_variable name="RandomZ" randomIntLow="25000" randomIntHigh="27000" />
+			<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="166" name="Xeno" podnumber="2" />					
+			<set_variable name="RandomX" randomIntLow="90000" randomIntHigh="99000" />
+			<set_variable name="RandomZ" randomIntLow="25000" randomIntHigh="27000" />
+			<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="166" name="Xeno" podnumber="2" />	
+			<set_variable name="RandomX" randomIntLow="90000" randomIntHigh="99000" />
+			<set_variable name="RandomZ" randomIntLow="25000" randomIntHigh="27000" />
+			<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="166" name="Xeno" podnumber="2" />				
+			<set_variable name="RandomX" randomIntLow="90000" randomIntHigh="99000" />
+			<set_variable name="RandomZ" randomIntLow="25000" randomIntHigh="27000" />
+			<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="166" name="Xeno" podnumber="2" />	
+			<set_variable name="RandomX" randomIntLow="90000" randomIntHigh="99000" />
+			<set_variable name="RandomZ" randomIntLow="25000" randomIntHigh="27000" />
+			<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="166" name="Xeno" podnumber="2" />	
+			<set_variable name="RandomX" randomIntLow="90000" randomIntHigh="99000" />
+			<set_variable name="RandomZ" randomIntLow="25000" randomIntHigh="27000" />
+			<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="166" name="Xeno" podnumber="2" />				
+		<!-- end create unnamed objects -->
+		
+		<set_variable name="IsCreate" value="0" />
+	</event>
+	<event name_arme="DestroyGrid22"> 
+		<if_variable name="IsDestroy" comparator="EQUALS" value="1" />
+		<if_variable name="destroy_x" comparator="EQUALS" value="2" />
+		<if_variable name="destroy_z" comparator="EQUALS" value="2" />
+			<!-- This is where all the objects are destroyed in the sector. -->
+			<destroy name="BH2-085" />
+			<destroy name="BH2-315" />
+
+			<!-- Flag the creation of a new sector if an event name_arme exists. -->
+			<set_variable name="IsDestroy" value="0" />
+			<set_variable name="IsCreate" value="1" />
+	</event>	
+	
+
+    <!-- Sector -10, -1 where the create and destroy pattern becomes active when transition -->
+	<event name_arme="CreateGrid-10-1">   
+		<if_variable name="IsCreate" comparator="EQUALS" value="1" />
+		<if_variable name="x" comparator="EQUALS" value="-10" />
+		<if_variable name="z" comparator="EQUALS" value="-1" />
+
+				<!-- create unnamed objects -->
+				<create count="216" type="nebulas" startX="72962.0" startY="0.0" startZ="7164.0" endX="11230.0" endY="0.0" endZ="17553.0" randomRange="13999" />
+				<create count="46" type="asteroids" startX="67993.0" startY="0.0" startZ="7917.0" endX="87566.0" endY="0.0" endZ="13337.0" randomRange="6941" />
+				<create count="97" type="asteroids" startX="63476.0" startY="0.0" startZ="78080.0" endX="39536.0" endY="0.0" endZ="73563.0" randomRange="9096" />
+				<create count="57" type="nebulas" startX="75521.0" startY="0.0" startZ="78080.0" endX="54442.0" endY="0.0" endZ="77478.0" randomRange="10160" />
+				<create count="43" type="asteroids" startX="46462.0" startY="0.0" startZ="44956.0" endX="32610.0" endY="0.0" endZ="39234.0" randomRange="6647" />
+				<create count="32" type="asteroids" startX="44655.0" startY="0.0" startZ="52634.0" endX="37579.0" endY="0.0" endZ="44203.0" randomRange="5939" />
+				<create count="32" type="asteroids" startX="50829.0" startY="0.0" startZ="67089.0" endX="45559.0" endY="0.0" endZ="51430.0" randomRange="6687" />
+				<create count="6" type="asteroids" startX="74919.0" startY="0.0" startZ="7917.0" radius="100" randomRange="550" />
+				<create count="6" type="asteroids" startX="71155.0" startY="0.0" startZ="12885.0" radius="100" randomRange="550" />
+				<create count="6" type="asteroids" startX="77629.0" startY="0.0" startZ="15144.0" radius="100" randomRange="550" />
+				<create count="6" type="asteroids" startX="40289.0" startY="0.0" startZ="39987.0" radius="100" randomRange="550" />
+				<create count="6" type="asteroids" startX="38934.0" startY="0.0" startZ="47515.0" radius="100" randomRange="550" />
+				<create count="6" type="asteroids" startX="45107.0" startY="0.0" startZ="57904.0" radius="100" randomRange="550" />
+				<create count="6" type="asteroids" startX="51431.0" startY="0.0" startZ="67089.0" radius="100" randomRange="550" />
+				<create count="6" type="asteroids" startX="47064.0" startY="0.0" startZ="72358.0" radius="100" randomRange="550" />
+				<create count="6" type="asteroids" startX="56098.0" startY="0.0" startZ="77478.0" radius="100" randomRange="550" />
+				<create count="6" type="asteroids" startX="58507.0" startY="0.0" startZ="70100.0" radius="100" randomRange="550" />
+				<!-- end create unnamed objects -->	
+	
+				<set_variable name="IsCreate" value="0" />
+	</event>  
+	<event name_arme="DestroyGrid-10-1"> 
+		<if_variable name="IsDestroy" comparator="EQUALS" value="1" />
+		<if_variable name="destroy_x" comparator="EQUALS" value="-10" />
+		<if_variable name="destroy_z" comparator="EQUALS" value="-1" />		
+			
+			<set_variable name="IsDestroy" value="0" />
+			<set_variable name="IsCreate" value="1" />
+	</event>
+
+	
+    <!-- Sector 4,5 where the create and destroy pattern becomes active when transitioned -->
+	<event name_arme="CreateGrid45">   
+		<if_variable name="IsCreate" comparator="EQUALS" value="1" />
+		<if_variable name="x" comparator="EQUALS" value="4" />
+		<if_variable name="z" comparator="EQUALS" value="5" />
+		<!-- This is where all the objects are created and configured -->
+		
+				
+				<!-- create unnamed objects -->
+				<set_variable name="RandomX" randomIntLow="55000" randomIntHigh="70000" />
+				<set_variable name="RandomZ" randomIntLow="10000" randomIntHigh="22000" />
+				<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="0" name="Xeno" podnumber="1" />
+				<set_variable name="RandomX" randomIntLow="55000" randomIntHigh="70000" />
+				<set_variable name="RandomZ" randomIntLow="10000" randomIntHigh="22000" />
+				<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="0" name="Xeno" podnumber="1" />
+				<set_variable name="RandomX" randomIntLow="55000" randomIntHigh="70000" />
+				<set_variable name="RandomZ" randomIntLow="10000" randomIntHigh="22000" />
+				<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="0" name="Xeno" podnumber="1" />
+				<set_variable name="RandomX" randomIntLow="55000" randomIntHigh="70000" />
+				<set_variable name="RandomZ" randomIntLow="10000" randomIntHigh="22000" />
+				<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="0" name="Xeno" podnumber="1" />
+				<set_variable name="RandomX" randomIntLow="55000" randomIntHigh="70000" />
+				<set_variable name="RandomZ" randomIntLow="10000" randomIntHigh="22000" />
+				<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="0" name="Xeno" podnumber="1" />
+				<set_variable name="RandomX" randomIntLow="55000" randomIntHigh="70000" />
+				<set_variable name="RandomZ" randomIntLow="10000" randomIntHigh="22000" />
+				<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="0" name="Xeno" podnumber="1" />		
+				<set_variable name="RandomX" randomIntLow="37000" randomIntHigh="44000" />
+				<set_variable name="RandomZ" randomIntLow="76000" randomIntHigh="80000" />
+				<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="0" name="Xeno" podnumber="2" />		
+				<set_variable name="RandomX" randomIntLow="37000" randomIntHigh="44000" />
+				<set_variable name="RandomZ" randomIntLow="76000" randomIntHigh="80000" />
+				<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="0" name="Xeno" podnumber="2" />	
+				<set_variable name="RandomX" randomIntLow="37000" randomIntHigh="44000" />
+				<set_variable name="RandomZ" randomIntLow="76000" randomIntHigh="80000" />
+				<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="0" name="Xeno" podnumber="2" />					
+				<set_variable name="RandomX" randomIntLow="37000" randomIntHigh="44000" />
+				<set_variable name="RandomZ" randomIntLow="76000" randomIntHigh="80000" />
+				<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="0" name="Xeno" podnumber="2" />	
+				<set_variable name="RandomX" randomIntLow="37000" randomIntHigh="44000" />
+				<set_variable name="RandomZ" randomIntLow="76000" randomIntHigh="80000" />
+				<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="0" name="Xeno" podnumber="2" />					
+				<set_variable name="RandomX" randomIntLow="37000" randomIntHigh="44000" />
+				<set_variable name="RandomZ" randomIntLow="76000" randomIntHigh="80000" />
+				<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="0" name="Xeno" podnumber="2" />	
+				<set_variable name="RandomX" randomIntLow="37000" randomIntHigh="44000" />
+				<set_variable name="RandomZ" randomIntLow="76000" randomIntHigh="80000" />
+				<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="0" name="Xeno" podnumber="2" />	
+				<set_variable name="RandomX" randomIntLow="37000" randomIntHigh="44000" />
+				<set_variable name="RandomZ" randomIntLow="76000" randomIntHigh="80000" />
+				<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="0" name="Xeno" podnumber="2" />	
+				<set_variable name="RandomX" randomIntLow="37000" randomIntHigh="44000" />
+				<set_variable name="RandomZ" randomIntLow="76000" randomIntHigh="80000" />
+				<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="0" name="Xeno" podnumber="2" />	
+				<set_variable name="RandomX" randomIntLow="37000" randomIntHigh="44000" />
+				<set_variable name="RandomZ" randomIntLow="76000" randomIntHigh="80000" />
+				<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="0" name="Xeno" podnumber="2" />	
+				<set_variable name="RandomX" randomIntLow="37000" randomIntHigh="44000" />
+				<set_variable name="RandomZ" randomIntLow="76000" randomIntHigh="80000" />
+				<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="0" name="Xeno" podnumber="2" />	
+				<set_variable name="RandomX" randomIntLow="37000" randomIntHigh="44000" />
+				<set_variable name="RandomZ" randomIntLow="76000" randomIntHigh="80000" />
+				<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="0" name="Xeno" podnumber="2" />	
+				<set_variable name="RandomX" randomIntLow="40000" randomIntHigh="90000" />
+				<set_variable name="RandomZ" randomIntLow="46000" randomIntHigh="60000" />
+				<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="0" name="Xeno" podnumber="3" />	
+				<set_variable name="RandomX" randomIntLow="40000" randomIntHigh="90000" />
+				<set_variable name="RandomZ" randomIntLow="46000" randomIntHigh="60000" />
+				<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="0" name="Xeno" podnumber="3" />	
+				<set_variable name="RandomX" randomIntLow="40000" randomIntHigh="90000" />
+				<set_variable name="RandomZ" randomIntLow="46000" randomIntHigh="60000" />
+				<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="0" name="Xeno" podnumber="3" />	
+				<set_variable name="RandomX" randomIntLow="40000" randomIntHigh="90000" />
+				<set_variable name="RandomZ" randomIntLow="46000" randomIntHigh="60000" />
+				<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="0" name="Xeno" podnumber="3" />	
+				<set_variable name="RandomX" randomIntLow="40000" randomIntHigh="90000" />
+				<set_variable name="RandomZ" randomIntLow="46000" randomIntHigh="60000" />
+				<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="0" name="Xeno" podnumber="3" />	
+				<set_variable name="RandomX" randomIntLow="40000" randomIntHigh="90000" />
+				<set_variable name="RandomZ" randomIntLow="46000" randomIntHigh="60000" />
+				<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="0" name="Xeno" podnumber="3" />	
+				<set_variable name="RandomX" randomIntLow="40000" randomIntHigh="90000" />
+				<set_variable name="RandomZ" randomIntLow="46000" randomIntHigh="60000" />
+				<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="0" name="Xeno" podnumber="3" />	
+				<set_variable name="RandomX" randomIntLow="40000" randomIntHigh="90000" />
+				<set_variable name="RandomZ" randomIntLow="46000" randomIntHigh="60000" />
+				<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="0" name="Xeno" podnumber="3" />	
+				<set_variable name="RandomX" randomIntLow="40000" randomIntHigh="90000" />
+				<set_variable name="RandomZ" randomIntLow="46000" randomIntHigh="60000" />
+				<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="0" name="Xeno" podnumber="3" />	
+				<set_variable name="RandomX" randomIntLow="40000" randomIntHigh="90000" />
+				<set_variable name="RandomZ" randomIntLow="46000" randomIntHigh="60000" />
+				<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="0" name="Xeno" podnumber="3" />	
+				<set_variable name="RandomX" randomIntLow="40000" randomIntHigh="90000" />
+				<set_variable name="RandomZ" randomIntLow="46000" randomIntHigh="60000" />
+				<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="0" name="Xeno" podnumber="3" />	
+				<set_variable name="RandomX" randomIntLow="40000" randomIntHigh="90000" />
+				<set_variable name="RandomZ" randomIntLow="46000" randomIntHigh="60000" />
+				<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="0" name="Xeno" podnumber="3" />					
+	
+				<!-- end create unnamed objects -->	
+		
+				<set_variable name="IsCreate" value="0" />
+	</event>
+	<event name_arme="DestroyGrid45"> 
+		<if_variable name="IsDestroy" comparator="EQUALS" value="1" />
+		<if_variable name="destroy_x" comparator="EQUALS" value="4" />
+		<if_variable name="destroy_z" comparator="EQUALS" value="5" />
+			<!-- This is where all the objects are destroyed in the sector. -->
+			
+			<!-- Flag the creation of a new sector if an event name_arme exists. -->
+			<set_variable name="IsDestroy" value="0" />
+			<set_variable name="IsCreate" value="1" />
+	</event>	
+	
+
+    <!-- END SECTOR DEFINITION, CREATION AND DESTRUCTION -->
+
+	
+ 
+	
+    <!-- BEGIN BLOCK FOR TRANSITION -->
+	
+	<!-- When the vessel moves out of the sector on the left side, it will appear on the right side -->
+	<event name_arme="PositionLeftX">
+	 <if_object_property name="Artemis" property="positionX" comparator="GREATER" value="99990"/>
+		 <set_object_property property="positionX" name="Artemis" value="100"/>
+		 <!-- Initiate the destroy pattern by setting the flag and recording the current sector position -->
+		 <set_variable name="IsDestroy" value="1" />	 
+		 <set_variable name="destroy_x" value="x" />
+		 <set_variable name="destroy_z" value="z" />
+		 <!-- This records the next sector, once the destroy pattern finishes, the create pattern will start using the new coordinates. -->
+		 <set_variable name="x" value="x-1" />
+
+		 <destroy_near type="all" radius="100000" centerX="50000" centerY="0.0" centerZ="50000" />
+
+		 <!-- Comms gets a message for current sector location -->
+		 <incoming_comms_text from="DSTAN AND ONBOARD NAV">Current position (|x|, |z|)</incoming_comms_text>
+	</event>
+	
+	<!-- When the vessel moves out of the sector on the bottom side, it will appear on the top side -->
 	<event name_arme="PositionBottomZ">
 	 <if_object_property name="Artemis" property="positionZ" comparator="GREATER" value="99990"/>
-	 <set_object_property property="positionZ" name="Artemis" value="100"/>
-	 <set_variable name="z" value="z-1" />
-	 <set_variable name="RandomA" randomIntLow="10" randomIntHigh="100000" integer="yes" />
-     <set_variable name="RandomB" randomIntLow="10" randomIntHigh="100000" integer="yes" />
-	 <incoming_comms_text from="DSTAN AND ONBOARD NAVIGATION">Current position (|x|.|RandomA|, |z|.|RandomB|)</incoming_comms_text>
-	</event>
+		 <set_object_property property="positionZ" name="Artemis" value="100"/>
+		 <!-- Initiate the destroy pattern by setting the flag and recording the current sector position -->
+		 <set_variable name="IsDestroy" value="1" />	 
+		 <set_variable name="destroy_x" value="x" />
+		 <set_variable name="destroy_z" value="z" />	
+		 <!-- This records the next sector, once the destroy pattern finishes, the create pattern will start using the new coordinates. -->		 
+		 <set_variable name="z" value="z-1" />
 
+     		<destroy_near type="all" radius="100000" centerX="50000" centerY="0.0" centerZ="50000" />
+	 
+		 <!-- Comms gets a message for current sector location -->
+		 <incoming_comms_text from="DSTAN AND ONBOARD NAV">Current position (|x|, |z|)</incoming_comms_text>
+	</event>
+	
+	<!-- When the vessel moves out of the sector on the right side, it will appear on the left side -->
 	<event name_arme="PositionRightX">
 	 <if_object_property name="Artemis" property="positionX" comparator="LESS" value="10"/>
-	 <set_object_property property="positionX" name="Artemis" value="99900"/>
-	 <set_variable name="x" value="x+1" />
-	 <set_variable name="RandomA" randomIntLow="10" randomIntHigh="100000" integer="yes" />
-     <set_variable name="RandomB" randomIntLow="10" randomIntHigh="100000" integer="yes" />
-	 <incoming_comms_text from="DSTAN AND ONBOARD NAVIGATION">Current position (|x|.|RandomA|, |z|.|RandomB|)</incoming_comms_text>
+		 <set_object_property property="positionX" name="Artemis" value="99900"/>
+		 <set_variable name="IsDestroy" value="1" />	 
+		 <set_variable name="destroy_x" value="x" />
+		 <set_variable name="destroy_z" value="z" />	 
+		 <set_variable name="x" value="x+1" />
+	 
+	         <destroy_near type="all" radius="100000" centerX="50000" centerY="0.0" centerZ="50000" />
+
+		 <incoming_comms_text from="DSTAN AND ONBOARD NAV">Current position (|x|, |z|)</incoming_comms_text>
 	</event>
 
+	<!-- When the vessel moves out of the sector on the top side, it will appear on the bottom side -->	
 	<event name_arme="PositionTopZ">
 	 <if_object_property name="Artemis" property="positionZ" comparator="LESS" value="10"/>
-	 <set_object_property property="positionZ" name="Artemis" value="99900"/>
-	 <set_variable name="z" value="z+1" />	 
-	 <set_variable name="RandomA" randomIntLow="10" randomIntHigh="100000" integer="yes" />
-     <set_variable name="RandomB" randomIntLow="10" randomIntHigh="100000" integer="yes" />
-	 <incoming_comms_text from="DSTAN AND ONBOARD NAVIGATION">Current position (|x|.|RandomA|, |z|.|RandomB|)</incoming_comms_text>
+		 <set_object_property property="positionZ" name="Artemis" value="99900"/>
+		 <set_variable name="IsDestroy" value="1" />	 
+		 <set_variable name="destroy_x" value="x" />
+		 <set_variable name="destroy_z" value="z" />	 
+		 <set_variable name="z" value="z+1" />	 
+
+     		 <destroy_near type="all" radius="100000" centerX="50000" centerY="0.0" centerZ="50000" />
+	 
+		 <incoming_comms_text from="DSTAN AND ONBOARD NAV">Current position (|x|, |z|)</incoming_comms_text>
 	</event>
 
+	<!-- END BLOCK FOR TRANSITION -->
+	
 </mission_data>
