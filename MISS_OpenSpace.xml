@@ -1,4 +1,4 @@
-<!-- Author: David Trinh, November 7, 2018 -->
+<!-- Author: David Trinh, November 8, 2018 -->
 <!-- email: a1on5678@tsn-artemis.ca  -->
 <!-- MIT License -->
 
@@ -24,10 +24,10 @@
 
 	<!-- SECTOR SUMMARY-->
 	<!-- Sector (0,0): -->
-	<!-- Command Base with nebulas and asteroids. -->
+	<!-- Command Base with nebulas, asteroids and mines. -->
 
 	<!-- Sector (1,0), (1,1), (-1,0), (-1,-1): -->
-	<!-- Nebulas and asteroids. -->
+	<!-- Nebula and asteroids. -->
 
 	<!-- Sector (2,2): -->
 	<!-- Black holes, anomolies, whales -->
@@ -36,12 +36,16 @@
 
 	<!-- Sector (4,5): pods of whales -->
 
+	<!-- 2018-11-07 10:53:25 PM Mission logged https://youtu.be/vxlGt12c1rA 
+	Orders http://1ofmanytsnuniverses.blogspot.com/2018/11/our-scout-vessel-and-ds00.html-->
+		
+
 <mission_data>
 	<start>
 		<create type="player"  x="50000" y="0" z="50000" angle="0" name="Artemis"/>
-                <!-- Starting sector -->
+        <!-- Starting sector -->
 		<set_variable name="x" value="0" integer="yes"/>
-                <set_variable name="z" value="0" integer="yes"/> 
+        <set_variable name="z" value="0" integer="yes"/> 
 		<!-- Sets the flag to create a sector based on the start position -->
 		<set_variable name="IsCreate" value="1" integer="yes"/>
 		
@@ -51,7 +55,7 @@
 		<!-- Sets the flag to destroy the sector we are leaving, the flag is reset as soon as it is done -->
 		<set_variable name="IsDestroy" value="0" integer="yes"/>
 		<set_variable name="destroy_x" value="0" integer="yes"/>
-                <set_variable name="destroy_z" value="0" integer="yes"/> 
+        <set_variable name="destroy_z" value="0" integer="yes"/> 
 
 	</start>
 
@@ -86,6 +90,73 @@
 		<create count="30" type="asteroids" startX="87265.0" startY="0.0" startZ="76273.0" endX="76575.0" endY="0.0" endZ="81392.0" randomRange="3089" />
 		<create count="60" type="nebulas" startX="11381.0" startY="0.0" startZ="94341.0" endX="16952.0" endY="0.0" endZ="63776.0" randomRange="6057" />
 		<!-- end create unnamed objects -->
+		
+		<!-- Mission logged https://youtu.be/vxlGt12c1rA 2018-11-07 10:53:25 PM -->
+		<create count="10" type="mines" startX="53051.0" startY="0.0" startZ="40992.0" endX="53051.0" endY="0.0" endZ="40992.0" />
+		<create count="10" type="mines" startX="51599.0" startY="0.0" startZ="40702.0" endX="51599.0" endY="0.0" endZ="40702.0" />
+		<create count="10" type="mines" startX="50146.0" startY="0.0" startZ="40702.0" endX="50146.0" endY="0.0" endZ="40702.0" />
+		<create count="10" type="mines" startX="48693.0" startY="0.0" startZ="40702.0" endX="48693.0" endY="0.0" endZ="40702.0" />
+		<create count="10" type="mines" startX="47240.0" startY="0.0" startZ="41138.0" endX="47240.0" endY="0.0" endZ="41138.0" />
+		<create count="10" type="mines" startX="45787.0" startY="0.0" startZ="42445.0" endX="45787.0" endY="0.0" endZ="42445.0" />
+		<create count="10" type="mines" startX="44480.0" startY="0.0" startZ="43898.0" endX="44480.0" endY="0.0" endZ="43898.0" />
+		<create count="10" type="mines" startX="43754.0" startY="0.0" startZ="45351.0" endX="43754.0" endY="0.0" endZ="45351.0" />
+		<create count="10" type="mines" startX="43027.0" startY="0.0" startZ="46513.0" endX="43027.0" endY="0.0" endZ="46513.0" />
+		<create count="10" type="mines" startX="42155.0" startY="0.0" startZ="47966.0" endX="42155.0" endY="0.0" endZ="47966.0" />
+		<create count="10" type="mines" startX="41865.0" startY="0.0" startZ="49273.0" endX="41865.0" endY="0.0" endZ="49273.0" />
+		<create count="10" type="mines" startX="41720.0" startY="0.0" startZ="50726.0" endX="41720.0" endY="0.0" endZ="50726.0" />
+		<create count="10" type="mines" startX="41720.0" startY="0.0" startZ="52469.0" endX="41720.0" endY="0.0" endZ="52469.0" />
+		<create count="10" type="mines" startX="42446.0" startY="0.0" startZ="54503.0" endX="42446.0" endY="0.0" endZ="54503.0" />
+		<create count="10" type="mines" startX="43463.0" startY="0.0" startZ="55665.0" endX="43463.0" endY="0.0" endZ="55665.0" />
+		<create count="10" type="mines" startX="44625.0" startY="0.0" startZ="56682.0" endX="44625.0" endY="0.0" endZ="56682.0" />
+		<create count="10" type="mines" startX="45933.0" startY="0.0" startZ="57699.0" endX="45933.0" endY="0.0" endZ="57699.0" />
+		<create count="10" type="mines" startX="47531.0" startY="0.0" startZ="58426.0" endX="47531.0" endY="0.0" endZ="58426.0" />
+		<create count="10" type="mines" startX="49129.0" startY="0.0" startZ="59007.0" endX="49129.0" endY="0.0" endZ="59007.0" />
+		<create count="10" type="mines" startX="50436.0" startY="0.0" startZ="59007.0" endX="50436.0" endY="0.0" endZ="59007.0" />
+		<create count="10" type="mines" startX="52034.0" startY="0.0" startZ="59152.0" endX="52034.0" endY="0.0" endZ="59152.0" />
+		<create count="10" type="mines" startX="53487.0" startY="0.0" startZ="58861.0" endX="53487.0" endY="0.0" endZ="58861.0" />
+		<create count="10" type="mines" startX="55521.0" startY="0.0" startZ="58861.0" endX="55521.0" endY="0.0" endZ="58861.0" />
+		<create count="10" type="mines" startX="57264.0" startY="0.0" startZ="57990.0" endX="57264.0" endY="0.0" endZ="57990.0" />
+		<create count="10" type="mines" startX="58281.0" startY="0.0" startZ="57263.0" endX="58281.0" endY="0.0" endZ="57263.0" />
+		<create count="10" type="mines" startX="59589.0" startY="0.0" startZ="57118.0" endX="59589.0" endY="0.0" endZ="57118.0" />
+		<create count="10" type="mines" startX="60461.0" startY="0.0" startZ="56392.0" endX="60461.0" endY="0.0" endZ="56392.0" />
+		<create count="10" type="mines" startX="62059.0" startY="0.0" startZ="55230.0" endX="62059.0" endY="0.0" endZ="55230.0" />
+		<create count="10" type="mines" startX="62640.0" startY="0.0" startZ="53486.0" endX="62640.0" endY="0.0" endZ="53486.0" />
+		<create count="10" type="mines" startX="62640.0" startY="0.0" startZ="51888.0" endX="62640.0" endY="0.0" endZ="51888.0" />
+		<create count="10" type="mines" startX="62785.0" startY="0.0" startZ="50145.0" endX="62785.0" endY="0.0" endZ="50145.0" />
+		<create count="10" type="mines" startX="62494.0" startY="0.0" startZ="48401.0" endX="62494.0" endY="0.0" endZ="48401.0" />
+		<create count="10" type="mines" startX="62059.0" startY="0.0" startZ="47094.0" endX="62059.0" endY="0.0" endZ="47094.0" />
+		<create count="10" type="mines" startX="61332.0" startY="0.0" startZ="45932.0" endX="61332.0" endY="0.0" endZ="45932.0" />
+		<create count="10" type="mines" startX="60751.0" startY="0.0" startZ="44479.0" endX="60751.0" endY="0.0" endZ="44479.0" />
+		<create count="10" type="mines" startX="48838.0" startY="0.0" startZ="26174.0" endX="48838.0" endY="0.0" endZ="26174.0" />
+		<create count="10" type="mines" startX="48112.0" startY="0.0" startZ="26610.0" endX="48112.0" endY="0.0" endZ="26610.0" />
+		<create count="10" type="mines" startX="47531.0" startY="0.0" startZ="26900.0" endX="47531.0" endY="0.0" endZ="26900.0" />
+		<create count="10" type="mines" startX="46659.0" startY="0.0" startZ="27046.0" endX="46659.0" endY="0.0" endZ="27046.0" />
+		<create count="10" type="mines" startX="46078.0" startY="0.0" startZ="27627.0" endX="46078.0" endY="0.0" endZ="27627.0" />
+		<create count="10" type="mines" startX="45497.0" startY="0.0" startZ="28644.0" endX="45497.0" endY="0.0" endZ="28644.0" />
+		<create count="10" type="mines" startX="45497.0" startY="0.0" startZ="29661.0" endX="45497.0" endY="0.0" endZ="29661.0" />
+		<create count="10" type="mines" startX="47531.0" startY="0.0" startZ="24721.0" endX="47531.0" endY="0.0" endZ="24721.0" />
+		<create count="10" type="mines" startX="46659.0" startY="0.0" startZ="25302.0" endX="46659.0" endY="0.0" endZ="25302.0" />
+		<create count="10" type="mines" startX="46223.0" startY="0.0" startZ="25593.0" endX="46223.0" endY="0.0" endZ="25593.0" />
+		<create count="10" type="mines" startX="45352.0" startY="0.0" startZ="25883.0" endX="45352.0" endY="0.0" endZ="25883.0" />
+		<create count="10" type="mines" startX="45061.0" startY="0.0" startZ="26755.0" endX="45061.0" endY="0.0" endZ="26755.0" />
+		<create count="10" type="mines" startX="44335.0" startY="0.0" startZ="26900.0" endX="44335.0" endY="0.0" endZ="26900.0" />
+		<create count="10" type="mines" startX="43899.0" startY="0.0" startZ="28644.0" endX="43899.0" endY="0.0" endZ="28644.0" />
+		<create count="10" type="mines" startX="70921.0" startY="0.0" startZ="47384.0" endX="70921.0" endY="0.0" endZ="47384.0" />
+		<create count="10" type="mines" startX="71066.0" startY="0.0" startZ="45205.0" endX="71066.0" endY="0.0" endZ="45205.0" />
+		<create count="10" type="mines" startX="70630.0" startY="0.0" startZ="42881.0" endX="70630.0" endY="0.0" endZ="42881.0" />
+		<create count="10" type="mines" startX="69904.0" startY="0.0" startZ="40702.0" endX="69904.0" endY="0.0" endZ="40702.0" />
+		<create count="10" type="mines" startX="68741.0" startY="0.0" startZ="38377.0" endX="68741.0" endY="0.0" endZ="38377.0" />
+		<create count="10" type="mines" startX="67289.0" startY="0.0" startZ="37215.0" endX="67289.0" endY="0.0" endZ="37215.0" />
+		<create count="10" type="mines" startX="65981.0" startY="0.0" startZ="35617.0" endX="65981.0" endY="0.0" endZ="35617.0" />
+		<create count="10" type="mines" startX="64819.0" startY="0.0" startZ="34164.0" endX="64819.0" endY="0.0" endZ="34164.0" />
+		<create count="10" type="mines" startX="63366.0" startY="0.0" startZ="33292.0" endX="63366.0" endY="0.0" endZ="33292.0" />
+		<create count="10" type="mines" startX="62204.0" startY="0.0" startZ="32421.0" endX="62204.0" endY="0.0" endZ="32421.0" />
+		<create count="10" type="mines" startX="60751.0" startY="0.0" startZ="31549.0" endX="60751.0" endY="0.0" endZ="31549.0" />
+		<create count="10" type="mines" startX="59589.0" startY="0.0" startZ="30968.0" endX="59589.0" endY="0.0" endZ="30968.0" />
+		<create count="10" type="mines" startX="58717.0" startY="0.0" startZ="30242.0" endX="58717.0" endY="0.0" endZ="30242.0" />
+		<create count="10" type="mines" startX="57555.0" startY="0.0" startZ="30387.0" endX="57555.0" endY="0.0" endZ="30387.0" />
+		<create count="10" type="mines" startX="55957.0" startY="0.0" startZ="30096.0" endX="55957.0" endY="0.0" endZ="30096.0" />		
+		
 		
 		<set_variable name="IsCreate" value="0" />
 	</event>
@@ -497,68 +568,68 @@
 	
  
 	
-    <!-- BEGIN BLOCK FOR TRANSITION -->
+	<!-- BEGIN BLOCK FOR TRANSITION -->
 	
 	<!-- When the vessel moves out of the sector on the left side, it will appear on the right side -->
 	<event name_arme="PositionLeftX">
 	 <if_object_property name="Artemis" property="positionX" comparator="GREATER" value="99990"/>
-		 <set_object_property property="positionX" name="Artemis" value="100"/>
-		 <!-- Initiate the destroy pattern by setting the flag and recording the current sector position -->
-		 <set_variable name="IsDestroy" value="1" />	 
-		 <set_variable name="destroy_x" value="x" />
-		 <set_variable name="destroy_z" value="z" />
-		 <!-- This records the next sector, once the destroy pattern finishes, the create pattern will start using the new coordinates. -->
-		 <set_variable name="x" value="x-1" />
+	 <set_object_property property="positionX" name="Artemis" value="100"/>
+     <!-- Initiate the destroy pattern by setting the flag and recording the current sector position -->
+	 <set_variable name="IsDestroy" value="1" />	 
+	 <set_variable name="destroy_x" value="x" />
+	 <set_variable name="destroy_z" value="z" />
+     <!-- This records the next sector, once the destroy pattern finishes, the create pattern will start using the new coordinates. -->
+	 <set_variable name="x" value="x-1" />
 
-		 <destroy_near type="all" radius="100000" centerX="50000" centerY="0.0" centerZ="50000" />
-
-		 <!-- Comms gets a message for current sector location -->
-		 <incoming_comms_text from="DSTAN AND ONBOARD NAV">Current position (|x|, |z|)</incoming_comms_text>
+     <destroy_near type="all" radius="100000" centerX="50000" centerY="0.0" centerZ="50000" />
+	 
+	 <!-- Comms gets a message for current sector location -->
+	 <incoming_comms_text from="DSTAN AND ONBOARD NAV">Current position (|x|, |z|)</incoming_comms_text>
 	</event>
 	
 	<!-- When the vessel moves out of the sector on the bottom side, it will appear on the top side -->
 	<event name_arme="PositionBottomZ">
 	 <if_object_property name="Artemis" property="positionZ" comparator="GREATER" value="99990"/>
-		 <set_object_property property="positionZ" name="Artemis" value="100"/>
-		 <!-- Initiate the destroy pattern by setting the flag and recording the current sector position -->
-		 <set_variable name="IsDestroy" value="1" />	 
-		 <set_variable name="destroy_x" value="x" />
-		 <set_variable name="destroy_z" value="z" />	
-		 <!-- This records the next sector, once the destroy pattern finishes, the create pattern will start using the new coordinates. -->		 
-		 <set_variable name="z" value="z-1" />
+	 <set_object_property property="positionZ" name="Artemis" value="100"/>
+	 <!-- Initiate the destroy pattern by setting the flag and recording the current sector position -->
+	 <set_variable name="IsDestroy" value="1" />	 
+	 <set_variable name="destroy_x" value="x" />
+	 <set_variable name="destroy_z" value="z" />	
+	 <!-- This records the next sector, once the destroy pattern finishes, the create pattern will start using the new coordinates. -->		 
+	 <set_variable name="z" value="z-1" />
 
-     		<destroy_near type="all" radius="100000" centerX="50000" centerY="0.0" centerZ="50000" />
+     <destroy_near type="all" radius="100000" centerX="50000" centerY="0.0" centerZ="50000" />
 	 
-		 <!-- Comms gets a message for current sector location -->
-		 <incoming_comms_text from="DSTAN AND ONBOARD NAV">Current position (|x|, |z|)</incoming_comms_text>
+	 <!-- Comms gets a message for current sector location -->
+	 <incoming_comms_text from="DSTAN AND ONBOARD NAV">Current position (|x|, |z|)</incoming_comms_text>
 	</event>
 	
 	<!-- When the vessel moves out of the sector on the right side, it will appear on the left side -->
 	<event name_arme="PositionRightX">
 	 <if_object_property name="Artemis" property="positionX" comparator="LESS" value="10"/>
-		 <set_object_property property="positionX" name="Artemis" value="99900"/>
-		 <set_variable name="IsDestroy" value="1" />	 
-		 <set_variable name="destroy_x" value="x" />
-		 <set_variable name="destroy_z" value="z" />	 
-		 <set_variable name="x" value="x+1" />
+	 <set_object_property property="positionX" name="Artemis" value="99900"/>
+	 <set_variable name="IsDestroy" value="1" />	 
+	 <set_variable name="destroy_x" value="x" />
+	 <set_variable name="destroy_z" value="z" />	 
+	 <set_variable name="x" value="x+1" />
 	 
-	         <destroy_near type="all" radius="100000" centerX="50000" centerY="0.0" centerZ="50000" />
-
-		 <incoming_comms_text from="DSTAN AND ONBOARD NAV">Current position (|x|, |z|)</incoming_comms_text>
+     <destroy_near type="all" radius="100000" centerX="50000" centerY="0.0" centerZ="50000" />
+	 
+	 <incoming_comms_text from="DSTAN AND ONBOARD NAV">Current position (|x|, |z|)</incoming_comms_text>
 	</event>
 
 	<!-- When the vessel moves out of the sector on the top side, it will appear on the bottom side -->	
 	<event name_arme="PositionTopZ">
 	 <if_object_property name="Artemis" property="positionZ" comparator="LESS" value="10"/>
-		 <set_object_property property="positionZ" name="Artemis" value="99900"/>
-		 <set_variable name="IsDestroy" value="1" />	 
-		 <set_variable name="destroy_x" value="x" />
-		 <set_variable name="destroy_z" value="z" />	 
-		 <set_variable name="z" value="z+1" />	 
+	 <set_object_property property="positionZ" name="Artemis" value="99900"/>
+	 <set_variable name="IsDestroy" value="1" />	 
+	 <set_variable name="destroy_x" value="x" />
+	 <set_variable name="destroy_z" value="z" />	 
+	 <set_variable name="z" value="z+1" />	 
 
-     		 <destroy_near type="all" radius="100000" centerX="50000" centerY="0.0" centerZ="50000" />
+     <destroy_near type="all" radius="100000" centerX="50000" centerY="0.0" centerZ="50000" />
 	 
-		 <incoming_comms_text from="DSTAN AND ONBOARD NAV">Current position (|x|, |z|)</incoming_comms_text>
+	 <incoming_comms_text from="DSTAN AND ONBOARD NAV">Current position (|x|, |z|)</incoming_comms_text>
 	</event>
 
 	<!-- END BLOCK FOR TRANSITION -->
