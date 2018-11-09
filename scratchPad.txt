@@ -1,0 +1,82 @@
+My Scratch Pad:
+
+https://math.stackexchange.com/questions/1168681/calculating-x-y-coordinates-of-a-moving-object
+
+Break it into coordinate directions. Given an angle of θ where an angle of zero corresponds to the positive x direction, and an angle of 90∘ (or equivalently π/2 radians) corresponds to the positive y direction, an initial x coordinate (labeled here as xi), an initial y coordinate (labeled here as yi), and an initial velocity (labeled here as v) you have the parametric equations:
+
+x(t)=xi+(vt)cos(θ)
+y(t)=yi+(vt)sin(θ)
+
+angle 0 degrees = cos(θ) is a constant of 1 
+angle 90 degress = cos(θ) is a constant of 0
+angle 180 degrees = cos(θ) is a constant of -1
+angle 270 degrees = cos(θ) is a constant of 0
+
+angle 0 degrees = sin(θ) is a constant of 0
+angle 90 degrees = sin(θ) is a constant of 1
+angle 180 degrees = sin(θ) is a constant of 0
+angle 270 degrees = sin(θ) is a constant of -1
+
+where v = 10 m/s or 0.4 impulse
+
+x(t)=xi+(vt)cos(θ)
+y(t)=yi+(vt)sin(θ)
+
+All localized grid calculations are in the bottom left quadrant of cartisian map. Technically everything is in negatives coordinates.
+
+at -10,000 and -50,000 with angle 270
+x(t) = -10,000 + (10 m/s * t) * 0
+y(t) = -50,000 + (10 m/s * t) * -1
+
+x(10) = -10,000 + (100) * 0
+y(10) = -50,000 + (100) * -1
+
+destination = -10,000 and -50,100
+
+It should be mentioned, here I use vcos(θ), but you could just as easily define vx=vcos(θ) where vx is the "velocity in the x direction." This simplifies equations in the case that you don't want or need to find or define the exact angle.
+
+Since you say "pixels" you might need to plan ahead or round somehow in order to account for how far specifically in any direction the objects will go, either by displaying at the closest pixel (rounding), or specifically using velocities and angles that give integer value distances for the target resolution (specifically 3 pixels right and 1 pixel up for example).
+
+The equation becomes only slightly more complicated as you take acceleration into account. See any elementary physics book or the internet for a full list such as PhysicsClassroom.com
+
+Calculating Angles from two Coordiantes
+
+float xDiff = x2 - x1;
+float yDiff = y2 - y1;
+return Math.Atan2(yDiff, xDiff) * 180.0 / Math.PI;
+
+Add 90 degress to rotate the entire compass so 0/360 points up.
+
+const double Rad2Deg = 180.0 / Math.PI;
+const double Deg2Rad = Math.PI / 180.0;
+
+/// <summary>
+/// Calculates angle in radians between two points and x-axis.
+/// </summary>
+private double Angle(Point start, Point end)
+{
+    return (Math.Atan2(start.Y - end.Y, end.X - start.X) * Rad2Deg)+90;
+}
+
+0,0 (x1,y1)
+1,1 (x2,y2)
+
+atan2(y1-y2,x2-x1)
+-1,1
+
+https://www.codeproject.com/Articles/1083372/Random-Number-Generator-Recommendations-for-Applic
+
+Custom seeds can come into play in the following situations, among others.
+
+Games
+Many kinds of games generate game content based on apparent randomness, such as—procedurally generated maps for a role-playing game, shuffling a digital deck of cards for a solitaire game, or a game board or puzzle board that normally varies every session, where the game might need to generate the same content of that kind multiple times.
+
+In general, such a game should use a PRNG with a custom seed for such purposes only if—generating the random content uses relatively many random numbers (say, more than a few thousand), and the application finds it impractical to store or distribute the content or the numbers for later use (see recommendations 2 and 3), 
+
+or
+
+the game makes the seed (or a "code" or "password" based on the seed, such as a barcode or a string of letters and digits) accessible to the player, to allow the player to regenerate the content (see recommendations 2 and 3).
+
+Option 1 often applies to games that generate procedural terrain for game levels, since the terrain often exhibits random variations over an extended space. Option 1 is less suitable for puzzle game boards or card shuffling, since much less data needs to be stored.
+
+Example: Suppose a game generates a map with random terrain and shows the player a "code" to generate that map. Under recommendation 4, the game—may change the algorithm it uses to generate random maps, but should use, in connection with the new algorithm, "codes" that can't be confused with "codes" it used for previous algorithms, and should continue to generate the same random map using an old "code" when the player enters it, even after the change to a new algorithm.
