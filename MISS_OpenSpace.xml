@@ -1,4 +1,4 @@
-<!-- Author: David Trinh, November 8, 2018 -->
+<!-- Author: David Trinh, November 10, 2018 -->
 <!-- email: a1on5678@tsn-artemis.ca  -->
 <!-- MIT License -->
 
@@ -22,10 +22,11 @@
 <!-- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE -->
 <!-- SOFTWARE. -->
 
-	<!-- SECTOR SUMMARY-->
+<!-- SECTOR SUMMARY -->
 	<!-- Sector (0,0): -->
 	<!-- Command Base with nebulas, asteroids and mines. -->
-
+	<!-- 11/07/2018: Mission to create defensive mines around DS00  -->
+	
 	<!-- Sector (1,0), (1,1), (-1,0), (-1,-1): -->
 	<!-- Nebula and asteroids. -->
 
@@ -36,13 +37,9 @@
 
 	<!-- Sector (4,5): pods of whales -->
 
-	<!-- 2018-11-07 10:53:25 PM Mission logged https://youtu.be/vxlGt12c1rA 
-	Orders http://1ofmanytsnuniverses.blogspot.com/2018/11/our-scout-vessel-and-ds00.html-->
-		
-
 <mission_data>
 	<start>
-		<create type="player"  x="50000" y="0" z="50000" angle="0" name="Artemis"/>
+		<create type="player" x="50000" y="0" z="50000" angle="0" name="Artemis"/>
         <!-- Starting sector -->
 		<set_variable name="x" value="0" integer="yes"/>
         <set_variable name="z" value="0" integer="yes"/> 
@@ -52,13 +49,31 @@
 		<!-- Comms gets a message for current sector location -->
 		<incoming_comms_text from="DSTAN AND ONBOARD NAV">Current position (|x|, |z|)</incoming_comms_text>
 		
+		<!-- Locking and unlocking sector transition -->
+		<set_variable name="IsSectorLocked" value="0" integer="yes"/>
+		
 		<!-- Sets the flag to destroy the sector we are leaving, the flag is reset as soon as it is done -->
 		<set_variable name="IsDestroy" value="0" integer="yes"/>
 		<set_variable name="destroy_x" value="0" integer="yes"/>
         <set_variable name="destroy_z" value="0" integer="yes"/> 
 
+		
+		<!-- BEGIN GM BUTTON DEFINITIONS -->
+			<set_gm_button text="Sector/Lock" menu_w="120" />
+			<set_gm_button text="Sector/Unlock" />
+			
+			<set_gm_button text="Delete\Selected ship" />
+			
+			<set_gm_button text="Create Cargo/going north" />
+			<set_gm_button text="Create/Friendly Targets"/>			
+			<gm_instructions title="Sector Locking">
+			You must unlock the sector in order for the vessels to continue the transition after you lock it.
+			^^
+			Use GM selection to define start location when creating vessels
+			</gm_instructions>
+		<!-- END GM BUTTON DEFINITIONS -->		
 	</start>
-
+	
     <!-- START SECTOR DEFINITION, CREATION AND DESTRUCTION -->
 	<event name_arme="CreateObjectGrid00">
 		<if_variable name="IsCreate" comparator="EQUALS" value="1" />
@@ -67,7 +82,6 @@
 		<if_variable name="w_sector_now_x" comparator="EQUALS" value="0" />
 		<if_variable name="w_sector_now_y" comparator="EQUALS" value="0" />		
 	</event>
-	
 	
     <!-- Sector 0,0 where the create and destroy pattern becomes active when transitioned -->
 	<event name_arme="CreateGrid00">   
@@ -91,7 +105,7 @@
 		<create count="60" type="nebulas" startX="11381.0" startY="0.0" startZ="94341.0" endX="16952.0" endY="0.0" endZ="63776.0" randomRange="6057" />
 		<!-- end create unnamed objects -->
 		
-		<!-- Mission logged https://youtu.be/vxlGt12c1rA 2018-11-07 10:53:25 PM -->
+		<!-- Mission logged on 2018-11-07 10:53:25 PM -->
 		<create count="10" type="mines" startX="53051.0" startY="0.0" startZ="40992.0" endX="53051.0" endY="0.0" endZ="40992.0" />
 		<create count="10" type="mines" startX="51599.0" startY="0.0" startZ="40702.0" endX="51599.0" endY="0.0" endZ="40702.0" />
 		<create count="10" type="mines" startX="50146.0" startY="0.0" startZ="40702.0" endX="50146.0" endY="0.0" endZ="40702.0" />
@@ -343,7 +357,6 @@
 			<set_variable name="IsCreate" value="1" />
 	</event>
 	
-
 	
     <!-- Sector 2,2 where the create and destroy pattern becomes active when transitioned -->
 	<event name_arme="CreateGrid22">   
@@ -353,12 +366,14 @@
 		<!-- This is where all the objects are created and configured -->
 			<create type="blackHole" x="60435.0" y="0.0" z="27135.0" name="BH2-085" />
 			<create type="blackHole" x="71330.0" y="0.0" z="69795.0" name="BH2-315" />	
+			<create type="anomaly" x="20077.0" y="0.0" z="22992.0" name="ANOM-293" />
+			<create type="anomaly" x="27903.0" y="0.0" z="22685.0" name="ANOM-294"/>
+			<create type="anomaly" x="11944.0" y="0.0" z="20383.0" name="ANOM-295"/>
+			<create type="anomaly" x="87750.0" y="0.0" z="21611.0" name="ANOM-296"/>
+			
 			
 		<!-- create unnamed objects -->
-			<create type="anomaly" x="20077.0" y="0.0" z="22992.0" />
-			<create type="anomaly" x="27903.0" y="0.0" z="22685.0" />
-			<create type="anomaly" x="11944.0" y="0.0" z="20383.0" />
-			<create type="anomaly" x="87750.0" y="0.0" z="21611.0" />
+
 			
 			<set_variable name="RandomX" randomIntLow="40000" randomIntHigh="60000" />
 			<set_variable name="RandomZ" randomIntLow="46000" randomIntHigh="50000" />
@@ -402,6 +417,10 @@
 			<!-- This is where all the objects are destroyed in the sector. -->
 			<destroy name="BH2-085" />
 			<destroy name="BH2-315" />
+			<destroy name="ANOM-293" />
+			<destroy name="ANOM-294" />
+			<destroy name="ANOM-295" />
+			<destroy name="ANOM-296" />
 
 			<!-- Flag the creation of a new sector if an event name_arme exists. -->
 			<set_variable name="IsDestroy" value="0" />
@@ -566,12 +585,68 @@
     <!-- END SECTOR DEFINITION, CREATION AND DESTRUCTION -->
 
 	
+	<!-- BEGIN BLOCK FOR CREATING AND DESTROYING VESSELS WITH GM -->
+	
+	  <!-- remove selected object -->
+	  <event name_arme="delete_selectedship">
+		<if_gm_button text="Delete\Selected ship" />
+		<destroy use_gm_selection="yes"/>
+	  </event>
+		
+	
+	  <!-- add transport pointing 0 -->
+	  <event name_arme="cargo_going_0">
+		<if_gm_button text="Create Cargo/going north" />
+		<create type ="neutral" raceKeys="friendly" hullKeys="cargo" use_gm_position="yes" angle="0" name="CARGO_1" />
+		<add_ai name="CARGO_1" type="FOLLOW_COMMS_ORDERS" />
+		<add_ai name="CARGO_1" value1="5000" type="AVOID_BLACK_HOLE" />
+		<set_ship_text name="CARGO_1" hailtext="We are enroute through the sector for The Telleron Consortium. Moving passenger and cargo across the galaxy." desc="We are enroute through the sector for The Telleron Consortium. Moving passenger and cargo across the galaxy." scan_desc="More info at www.telleron.com" />
+	  </event>
+	
+	  <!-- add basic friendly enemy -->
+	<event name_arme="friendly_targets">
+		<if_gm_button text="Create/Friendly Targets" />
+		<create type="enemy" raceKeys="friendly" hullKeys="light" use_gm_position="yes" angle="90" fleetnumber="-1"/>
+		<create type="enemy" raceKeys="friendly" hullKeys="medium" use_gm_position="yes" angle="90" fleetnumber="-1"/>
+		<create type="enemy" raceKeys="friendly" hullKeys="heavy" use_gm_position="yes" angle="90" fleetnumber="-1"/>
+    </event>
+	
+	
+	
+	<!-- END BLOCK FOR CREATING AND DESTROYING VESSELS WITH GM -->
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<!-- BEGIN BLOCK FOR LOCKING AND UNLOCKING FOR TRANSITION -->
+	<event name_arme="SectorLocking">
+		<if_gm_button text="Sector/Lock" />
+		<if_variable name="IsSectorLocked" comparator="EQUALS" value="0" />
+		 <set_variable name="IsSectorLocked" value="1" />
+		 <big_message title="Priority Message" subtitle1="Incoming Transmission" subtitle2="See Communications Console" />
+		 <warning_popup_message message="Incoming Transmission" consoles="MHWESCO" />
+		 <incoming_comms_text from="DS00">Hold your position in this sector, Priority Message for Commanding Officer incoming.</incoming_comms_text>
+	</event>
+	<event name_arme="SectorUnLocking">
+		<if_gm_button text="Sector/Unlock" />
+		<if_variable name="IsSectorLocked" comparator="EQUALS" value="1" />
+		 <set_variable name="IsSectorLocked" value="0" />			
+		 <incoming_comms_text from="DS00">Commanding Officer, carry out debrief session with your crew if neccessary, then carry on.</incoming_comms_text>		
+	</event>
+	<!-- END BLOCK FOR LOCKING AND UNLOCKING FOR TRANSITION -->
  
 	
 	<!-- BEGIN BLOCK FOR TRANSITION -->
 	
 	<!-- When the vessel moves out of the sector on the left side, it will appear on the right side -->
 	<event name_arme="PositionLeftX">
+	 <if_variable name="IsSectorLocked" comparator="EQUALS" value="0" />
 	 <if_object_property name="Artemis" property="positionX" comparator="GREATER" value="99990"/>
 	 <set_object_property property="positionX" name="Artemis" value="100"/>
      <!-- Initiate the destroy pattern by setting the flag and recording the current sector position -->
@@ -589,6 +664,7 @@
 	
 	<!-- When the vessel moves out of the sector on the bottom side, it will appear on the top side -->
 	<event name_arme="PositionBottomZ">
+	 <if_variable name="IsSectorLocked" comparator="EQUALS" value="0" />
 	 <if_object_property name="Artemis" property="positionZ" comparator="GREATER" value="99990"/>
 	 <set_object_property property="positionZ" name="Artemis" value="100"/>
 	 <!-- Initiate the destroy pattern by setting the flag and recording the current sector position -->
@@ -606,6 +682,7 @@
 	
 	<!-- When the vessel moves out of the sector on the right side, it will appear on the left side -->
 	<event name_arme="PositionRightX">
+	 <if_variable name="IsSectorLocked" comparator="EQUALS" value="0" />
 	 <if_object_property name="Artemis" property="positionX" comparator="LESS" value="10"/>
 	 <set_object_property property="positionX" name="Artemis" value="99900"/>
 	 <set_variable name="IsDestroy" value="1" />	 
@@ -620,6 +697,7 @@
 
 	<!-- When the vessel moves out of the sector on the top side, it will appear on the bottom side -->	
 	<event name_arme="PositionTopZ">
+	 <if_variable name="IsSectorLocked" comparator="EQUALS" value="0" />
 	 <if_object_property name="Artemis" property="positionZ" comparator="LESS" value="10"/>
 	 <set_object_property property="positionZ" name="Artemis" value="99900"/>
 	 <set_variable name="IsDestroy" value="1" />	 
