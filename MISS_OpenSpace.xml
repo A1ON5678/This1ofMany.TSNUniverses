@@ -1,4 +1,4 @@
-<!-- Author: David Trinh, November 23, 2018 -->
+<!-- Author: David Trinh, November 27, 2018 -->
 <!-- email: a1on5678@tsn-artemis.ca  -->
 <!-- MIT License -->
 
@@ -26,25 +26,21 @@
 	<!-- Sector (0,0): -->
 	<!-- Command Base with nebulas, asteroids and mines. -->
 	<!-- 11/07/2018: Mission to create defensive mines around DS00  -->
+	<!-- 11/26/2018: Mission to move DS02 to sector (2,2) -->
 	
 	<!-- Sector (1,0), (1,1), (-1,0), (-1,-1): -->
 	<!-- Nebula and asteroids. -->
-
 	<!-- Sector (2,2): -->
-	<!-- Black holes, anomaly, whales -->
-
+	<!-- Black holes, whales, DS02 -->
 	<!-- Sector (-10,-1): nebulas and asteroids. -->
-
 	<!-- Sector (4,5): pods of whales -->
-	
-	<!-- Sector (2,15): anomalies -->
-	
-	<!-- Sector (2,27): Civilian Base  -->
+	<!-- Sector (2,27): asteroids  -->
+	<!-- sector (-10,-1): nebulas and asteroids. -->
 	
 <mission_data>
 	<start>
 		<create type="player" x="50000" y="0" z="50000" angle="0" name="Artemis"/>
-        <!-- Starting sector -->
+        	<!-- Starting sector -->
 		<set_variable name="x" value="0" integer="yes"/>
         	<set_variable name="z" value="0" integer="yes"/> 
 		<!-- Sets the flag to create a sector based on the start position -->
@@ -58,8 +54,8 @@
 		
 		<!-- Sets the flag to destroy the sector we are leaving, the flag is reset as soon as it is done -->
 		<set_variable name="IsDestroy" value="0" integer="yes"/>
-		<set_variable name="destroy_x" value="0" integer="yes"/>
-       		<set_variable name="destroy_z" value="0" integer="yes"/> 
+		<set_variable name="destroy_x" value="10000" integer="yes"/>
+        	<set_variable name="destroy_z" value="10000" integer="yes"/> 
 
 		
 		<!-- BEGIN GM BUTTON DEFINITIONS -->
@@ -90,32 +86,24 @@
 		<!-- ANOM-293 in sector 2,2-->
 			<set_variable name="IsExist-ANOM-293" value="1" integer="yes"/>	
 			<set_variable name="IsExist-DS00" value="1" integer="yes"/>
-			<set_variable name="IsExist-DS19" value="1" integer="yes"/>
+			<set_variable name="IsExist-DS02" value="1" integer="yes"/>
+			<set_variable name="IsExist-Excalibur" value="1" integer="yes"/>
+			<set_variable name="IsExist-BC01" value="1" integer="yes"/>			
 		<!-- END TRACKING OF NON RENEWABLE NAMED OBJECTS -->
 		
+		<!-- Fuel Collection System Initialization -->
+		<set_timer name="bussardramjet_timer" seconds="10"/>
+		<!-- End Fuel Collection System Initialization -->
+		<!-- Sets the flag and life span for installing Bussard Ram Jet -->
+		<set_variable name="IsFuelColSys" value="0" integer="yes"/>
+		<set_timer name="LifespanFuelColSys" seconds="10"/>
+		<!-- End Sets the flag and life span for installing Bussard Ram Jet -->
+
 	</start>
 	
     <!-- START SECTOR DEFINITION, CREATION AND DESTRUCTION -->
-	
-	<!-- WHILE IN SECTOR (0,0) AND DS00 NOT EXIST, SET THE OBJECT AS DESTROYED -->
-	<event name_arme="CreateGrid00NamedObjects">
-		<if_variable name="IsCreate" comparator="EQUALS" value="1" />
-		<if_variable name="x" comparator="EQUALS" value="0" />
-		<if_variable name="z" comparator="EQUALS" value="0" />
-		<if_variable name="IsExist-DS00" comparator="EQUALS" value="1" />
-		<!-- This is where all the objects are created and configured if not consumed -->
-			<create type ="station" raceKeys="friendly" hullKeys="Command Base" x="50000" y="300" z="50000" name="DS00"/>	
-	</event>	
-	<!-- ONCE CONSUMED, DO NOT ALLOW RECREATION OF NAMED OBJECT  -->
-	<event name_arme="CreateGrid00NamedObjectsConsumed">
-		<if_variable name="IsCreate" comparator="EQUALS" value="0" />
-		<if_variable name="x" comparator="EQUALS" value="0" />
-		<if_variable name="z" comparator="EQUALS" value="0" />
-		<if_variable name="IsExist-DS00" comparator="EQUALS" value="1" />
-		<if_not_exists name="DS00" />
-			<set_variable name="IsExist-DS00" value="0" />
-	</event>	
-	
+
+
 	
     <!-- Sector 0,0 where the create and destroy pattern becomes active when transitioned -->
 	<event name_arme="CreateGrid00">   
@@ -123,7 +111,8 @@
 		<if_variable name="x" comparator="EQUALS" value="0" />
 		<if_variable name="z" comparator="EQUALS" value="0" />
 		<!-- This is where all the objects are created and configured -->
-		
+		<create type ="station" raceKeys="friendly" hullKeys="Command Base" x="50000" y="300" z="50000" name="DS00"/>
+
 		
 		<!-- create unnamed objects -->
 		<create count="170" type="nebulas" startX="78834.0" startY="0.0" startZ="12132.0" endX="32761.0" endY="0.0" endZ="44203.0" randomRange="10723" />
@@ -221,44 +210,6 @@
 	</event>
 	<!-- Thus, ever sector that is defined hereafter, will have a create and destroy pattern which identifies the sector number in the name_arme attributes. The x,z coordinates will reflect that sector. -->
 
-	<!-- Unamed objects will destroy per the destroy command. However, each named object will need be explicitly destroyed one line at a time. -->
-
-	
-    <!-- Sector 1,0 where the create and destroy pattern becomes active when transitioned -->
-	<event name_arme="CreateGrid10">   
-		<if_variable name="IsCreate" comparator="EQUALS" value="1" />
-		<if_variable name="x" comparator="EQUALS" value="1" />
-		<if_variable name="z" comparator="EQUALS" value="0" />
-		<!-- This is where all the objects are created and configured -->
-
-		<!-- create unnamed objects -->
-		<create count="125" type="nebulas" startAngle="251" endAngle="27" startX="33637.0" startY="0.0" startZ="67024.0" radius="18750" randomRange="8125" />
-		<create count="70" type="nebulas" startAngle="31" endAngle="230" startX="38934.0" startY="0.0" startZ="41191.0" radius="10245" randomRange="8050" />
-		<create count="71" type="nebulas" startX="55768.0" startY="0.0" startZ="67991.0" endX="73564.0" endY="0.0" endZ="89974.0" randomRange="8548" />
-		<create count="41" type="nebulas" startX="39085.0" startY="0.0" startZ="42547.0" endX="59110.0" endY="0.0" endZ="69347.0" randomRange="6036" />
-		<create count="71" type="nebulas" startX="53358.0" startY="0.0" startZ="82109.0" endX="51431.0" endY="0.0" endZ="96298.0" randomRange="8548" />
-		<create count="273" type="asteroids" startX="83610.0" startY="0.0" startZ="16887.0" radius="10521" randomRange="9717" />
-		<create count="167" type="asteroids" startX="43224.0" startY="0.0" startZ="8181.0" endX="68182.0" endY="0.0" endZ="7520.0" randomRange="9077" />
-		<create count="70" type="asteroids" startX="88513.0" startY="0.0" startZ="36611.0" endX="99422.0" endY="0.0" endZ="45206.0" randomRange="8817" />
-		<create count="16" type="nebulas" startX="17855.0" startY="0.0" startZ="39385.0" radius="1684" randomRange="1664" />
-		<!-- end create unnamed objects -->
-
-		<set_variable name="IsCreate" value="0" />
-	</event>  
-	
-	<event name_arme="DestroyGrid10"> 
-		<if_variable name="IsDestroy" comparator="EQUALS" value="1" />
-		<if_variable name="destroy_x" comparator="EQUALS" value="1" />
-		<if_variable name="destroy_z" comparator="EQUALS" value="0" />		
-			<!-- This is where all the objects are destroyed in the sector. -->
-			
-			<set_variable name="IsDestroy" value="0" />
-			<set_variable name="IsCreate" value="1" />
-	</event>
-
-	
-	
-	
     <!-- Sector 1,1 where the create and destroy pattern becomes active when transitioned -->
 	<event name_arme="CreateGrid11">   
 		<if_variable name="IsCreate" comparator="EQUALS" value="1" />
@@ -295,6 +246,41 @@
 	</event>
 
 	
+	<!-- Unamed objects will destroy per the destroy command. However, each named object will need be explicitly destroyed one line at a time. -->
+
+    <!-- Sector 1,0 where the create and destroy pattern becomes active when transitioned -->
+	<event name_arme="CreateGrid10">   
+		<if_variable name="IsCreate" comparator="EQUALS" value="1" />
+		<if_variable name="x" comparator="EQUALS" value="1" />
+		<if_variable name="z" comparator="EQUALS" value="0" />
+		<!-- This is where all the objects are created and configured -->
+
+		<!-- create unnamed objects -->
+		<create count="125" type="nebulas" startAngle="251" endAngle="27" startX="33637.0" startY="0.0" startZ="67024.0" radius="18750" randomRange="8125" />
+		<create count="70" type="nebulas" startAngle="31" endAngle="230" startX="38934.0" startY="0.0" startZ="41191.0" radius="10245" randomRange="8050" />
+		<create count="71" type="nebulas" startX="55768.0" startY="0.0" startZ="67991.0" endX="73564.0" endY="0.0" endZ="89974.0" randomRange="8548" />
+		<create count="41" type="nebulas" startX="39085.0" startY="0.0" startZ="42547.0" endX="59110.0" endY="0.0" endZ="69347.0" randomRange="6036" />
+		<create count="71" type="nebulas" startX="53358.0" startY="0.0" startZ="82109.0" endX="51431.0" endY="0.0" endZ="96298.0" randomRange="8548" />
+		<create count="273" type="asteroids" startX="83610.0" startY="0.0" startZ="16887.0" radius="10521" randomRange="9717" />
+		<create count="167" type="asteroids" startX="43224.0" startY="0.0" startZ="8181.0" endX="68182.0" endY="0.0" endZ="7520.0" randomRange="9077" />
+		<create count="70" type="asteroids" startX="88513.0" startY="0.0" startZ="36611.0" endX="99422.0" endY="0.0" endZ="45206.0" randomRange="8817" />
+		<create count="16" type="nebulas" startX="17855.0" startY="0.0" startZ="39385.0" radius="1684" randomRange="1664" />
+		<!-- end create unnamed objects -->
+
+		<set_variable name="IsCreate" value="0" />
+	</event>  
+	<event name_arme="DestroyGrid10"> 
+		<if_variable name="IsDestroy" comparator="EQUALS" value="1" />
+		<if_variable name="destroy_x" comparator="EQUALS" value="1" />
+		<if_variable name="destroy_z" comparator="EQUALS" value="0" />		
+			<!-- This is where all the objects are destroyed in the sector. -->
+			
+			<set_variable name="IsDestroy" value="0" />
+			<set_variable name="IsCreate" value="1" />
+	</event>
+
+	
+
     <!-- Sector 0,1 where the create and destroy pattern becomes active when transition -->
 	<event name_arme="CreateGrid01">   
 		<if_variable name="IsCreate" comparator="EQUALS" value="1" />
@@ -393,8 +379,88 @@
 	
 	
     <!-- Sector 2,2 where the create and destroy pattern becomes active when transitioned -->
+	
+	
+	<!-- WHILE IN SECTOR (2,2) AND DS02 NOT EXIST, SET THE OBJECT AS DESTROYED -->
+	<event name_arme="CreateGrid22NamedObjectsDS02">
+		<if_variable name="IsCreate" comparator="EQUALS" value="1" />
+		<if_variable name="x" comparator="EQUALS" value="2" />
+		<if_variable name="z" comparator="EQUALS" value="2" />
+		<if_variable name="IsExist-DS02" comparator="EQUALS" value="1" />
+		<!-- This is where all the objects are created and configured if not consumed -->
+			<create type ="station" raceKeys="friendly" hullKeys="Industrial Base" x="50000" y="-300" z="50000" name="DS02"/>
+            <incoming_comms_text from="DS02">
+            We are glad to see you! You are cleared for docking, crew standing by.
+			</incoming_comms_text>
+	</event>	
+	<!-- ONCE CONSUMED, DO NOT ALLOW RECREATION OF NAMED OBJECT  -->
+	<event name_arme="CreateGrid22NamedObjectsConsumedDS02">
+		<if_variable name="IsCreate" comparator="EQUALS" value="0" />
+		<if_variable name="x" comparator="EQUALS" value="2" />
+		<if_variable name="z" comparator="EQUALS" value="2" />
+		<if_variable name="IsExist-DS02" comparator="EQUALS" value="1" />
+		<if_not_exists name="DS02" />
+			<set_variable name="IsExist-DS02" value="0" />
+			<incoming_comms_text from="Crew member with telepathy">
+            I felt a great disturbance, if millions of voices suddenly cried out in terror and were suddenly silenced.
+			</incoming_comms_text>
+	</event>	
+	
+	
+		<!-- WHILE IN SECTOR (2,2) AND TSN Excalibur NOT EXIST, SET THE OBJECT AS DESTROYED -->
+	<event name_arme="CreateGrid22NamedObjectsExcalibur">
+		<if_variable name="IsCreate" comparator="EQUALS" value="1" />
+		<if_variable name="x" comparator="EQUALS" value="2" />
+		<if_variable name="z" comparator="EQUALS" value="2" />
+		<if_variable name="IsExist-Excalibur" comparator="EQUALS" value="1" />
+		<!-- This is where all the objects are created and configured if not consumed -->
+			<create type ="neutral" raceKeys="friendly" hullKeys="Light Cruiser" angle="270" name="TSN-Excalibur" x="50000" y="-100" z="50000" />
+			<set_ship_text name="TSN-Excalibur" hailtext="Currently being built. Not operational yet. Officer Davis being considered as Captain for this ship." desc="TSN Light Cruiser" scan_desc="" />
+			<!-- <add_ai name="BC01" type="FOLLOW_COMMS_ORDERS" /> -->
+			<add_ai type="DIR_THROTTLE" name="TSN-Excalibur" value1="270" value2="0" />
+            <incoming_comms_text from="TSN-Excalibur">
+            We are offline, not operational and being built.
+			</incoming_comms_text>
+	</event>	
+	<!-- ONCE CONSUMED, DO NOT ALLOW RECREATION OF NAMED OBJECT  -->
+	<event name_arme="CreateGrid22NamedObjectsConsumedExcalibur">
+		<if_variable name="IsCreate" comparator="EQUALS" value="0" />
+		<if_variable name="x" comparator="EQUALS" value="2" />
+		<if_variable name="z" comparator="EQUALS" value="2" />
+		<if_variable name="IsExist-Excalibur" comparator="EQUALS" value="1" />
+		<if_not_exists name="TSN-Excalibur" />
+			<set_variable name="IsExist-Excalibur" value="0" />
+	</event>
+	
+	
+	
+	<!-- WHILE IN SECTOR (2,2) AND BC01 NOT EXIST, SET THE OBJECT AS DESTROYED -->
+	<event name_arme="CreateGrid22NamedObjectsBC01">
+		<if_variable name="IsCreate" comparator="EQUALS" value="1" />
+		<if_variable name="x" comparator="EQUALS" value="2" />
+		<if_variable name="z" comparator="EQUALS" value="2" />
+		<if_variable name="IsExist-BC01" comparator="EQUALS" value="1" />
+		<!-- This is where all the objects are created and configured if not consumed -->
+			<create type ="neutral" raceKeys="friendly" hullKeys="cargo" angle="270" name="BC01" x="50000" y="500" z="50000" />
+			<!-- <add_ai name="BC01" type="FOLLOW_COMMS_ORDERS" /> -->
+			<add_ai type="DIR_THROTTLE" name="BC01" value1="270" value2="0" />
+			<set_ship_text name="BC01" hailtext="Currently being built. Not operational yet." desc="TSN Bulk Cargo" scan_desc="" />
+            <incoming_comms_text from="BC01">
+            We are offline, not operational and being built.
+			</incoming_comms_text>
+	</event>	
+	<!-- ONCE CONSUMED, DO NOT ALLOW RECREATION OF NAMED OBJECT  -->
+	<event name_arme="CreateGrid22NamedObjectsConsumedBC01">
+		<if_variable name="IsCreate" comparator="EQUALS" value="0" />
+		<if_variable name="x" comparator="EQUALS" value="2" />
+		<if_variable name="z" comparator="EQUALS" value="2" />
+		<if_variable name="IsExist-BC01" comparator="EQUALS" value="1" />
+		<if_not_exists name="BC01" />
+			<set_variable name="IsExist-BC01" value="0" />
+	</event>
+	
 	<!-- WHILE IN SECTOR (2,2) AND ANOM-293 NOT EXIST, SET THE OBJECT AS USED UP -->
-	<event name_arme="CreateGrid22NamedObjects">   
+	<event name_arme="CreateGrid22NamedObjectsAnom-293">   
 		<if_variable name="IsCreate" comparator="EQUALS" value="1" />
 		<if_variable name="x" comparator="EQUALS" value="2" />
 		<if_variable name="z" comparator="EQUALS" value="2" />
@@ -403,7 +469,7 @@
 			<create type="anomaly" x="20077.0" y="0.0" z="22992.0" name="ANOM-293" />
 	</event>	
 	<!-- ONCE CONSUMED, DO NOT ALLOW RECREATION OF NAMED OBJECT  -->
-	<event name_arme="CreateGrid22NamedObjectsConsumed">   
+	<event name_arme="CreateGrid22NamedObjectsConsumedAnom-293">   
 		<if_variable name="IsCreate" comparator="EQUALS" value="0" />
 		<if_variable name="x" comparator="EQUALS" value="2" />
 		<if_variable name="z" comparator="EQUALS" value="2" />
@@ -419,15 +485,9 @@
 		<!-- This is where all the objects are created and configured -->
 			<create type="blackHole" x="60435.0" y="0.0" z="27135.0" name="BH2-085" />
 			<create type="blackHole" x="71330.0" y="0.0" z="69795.0" name="BH2-315" />	
-			<!-- <create type="anomaly" x="20077.0" y="0.0" z="22992.0" name="ANOM-293" /> -->
-			<!-- <create type="anomaly" x="27903.0" y="0.0" z="22685.0" name="ANOM-294"/> -->
-			<!-- <create type="anomaly" x="11944.0" y="0.0" z="20383.0" name="ANOM-295"/> -->
-			<!-- <create type="anomaly" x="87750.0" y="0.0" z="21611.0" name="ANOM-296"/> -->
 			
-			
-		<!-- create unnamed objects -->
+			<!-- create unnamed objects -->
 
-			
 			<set_variable name="RandomX" randomIntLow="40000" randomIntHigh="60000" />
 			<set_variable name="RandomZ" randomIntLow="46000" randomIntHigh="50000" />
 			<create type="whale" x="RandomX" y="0.0" z="RandomZ" angle="0" name="Xeno" podnumber="1" />		
@@ -471,13 +531,41 @@
 			<destroy name="BH2-085" />
 			<destroy name="BH2-315" />
 			<destroy name="ANOM-293" />
-
+			<destroy name="DS02" />
+			<destroy name="TSN-Excalibur" />
+			<destroy name="BC01" />
+			
 			<!-- Flag the creation of a new sector if an event name_arme exists. -->
 			<set_variable name="IsDestroy" value="0" />
 			<set_variable name="IsCreate" value="1" />
 	</event>	
 
-
+	<!-- WHILE IN SECTOR (-10,-1) AND DS212 NOT EXIST, SET THE OBJECT AS DESTROYED -->
+	<event name_arme="CreateGrid-10-1NamedObjects">
+		<if_variable name="IsCreate" comparator="EQUALS" value="1" />
+		<if_variable name="x" comparator="EQUALS" value="-10" />
+		<if_variable name="z" comparator="EQUALS" value="-1" />
+		<if_variable name="IsExist-DS212" comparator="EQUALS" value="1" />
+		<!-- This is where all the objects are created and configured if not consumed -->
+			<create type ="station" raceKeys="friendly" hullKeys="Science Base" x="80000" y="300" z="80000" name="DS212"/>
+            <incoming_comms_text from="DS212">
+            We are glad to see you! You are cleared for docking, crew standing by.
+			</incoming_comms_text>
+		
+	</event>	
+	<!-- ONCE CONSUMED, DO NOT ALLOW RECREATION OF NAMED OBJECT  -->
+	<event name_arme="CreateGrid-10-1NamedObjectsConsumed">
+		<if_variable name="IsCreate" comparator="EQUALS" value="0" />
+		<if_variable name="x" comparator="EQUALS" value="-10" />
+		<if_variable name="z" comparator="EQUALS" value="-1" />
+		<if_variable name="IsExist-DS212" comparator="EQUALS" value="1" />
+		<if_not_exists name="DS212" />
+			<set_variable name="IsExist-DS212" value="0" />
+			<incoming_comms_text from="Crew member with telepathy">
+            		I just felt a great disturbance, as if 13,000 voices suddenly cried out in terror and were suddenly silenced. I fear something terrible has happened.
+			</incoming_comms_text>
+	</event>	
+		
     <!-- Sector -10, -1 where the create and destroy pattern becomes active when transition -->
 	<event name_arme="CreateGrid-10-1">   
 		<if_variable name="IsCreate" comparator="EQUALS" value="1" />
@@ -510,11 +598,10 @@
 		<if_variable name="IsDestroy" comparator="EQUALS" value="1" />
 		<if_variable name="destroy_x" comparator="EQUALS" value="-10" />
 		<if_variable name="destroy_z" comparator="EQUALS" value="-1" />		
-			
+			<destroy name="DS212" />
 			<set_variable name="IsDestroy" value="0" />
 			<set_variable name="IsCreate" value="1" />
 	</event>
-
 	
     <!-- Sector 4,5 where the create and destroy pattern becomes active when transitioned -->
 	<event name_arme="CreateGrid45">   
@@ -630,36 +717,6 @@
 			<set_variable name="IsDestroy" value="0" />
 			<set_variable name="IsCreate" value="1" />
 	</event>	
-
-
-	
-	
-	<!-- WHILE IN SECTOR (2,27) AND DS00 NOT EXIST, SET THE OBJECT AS DESTROYED -->
-	<event name_arme="CreateGrid00NamedObjects">
-		<if_variable name="IsCreate" comparator="EQUALS" value="1" />
-		<if_variable name="x" comparator="EQUALS" value="2" />
-		<if_variable name="z" comparator="EQUALS" value="27" />
-		<if_variable name="IsExist-DS19" comparator="EQUALS" value="1" />
-		<!-- This is where all the objects are created and configured if not consumed -->
-			<create type ="station" raceKeys="friendly" hullKeys="Civilian Base" x="50000" y="300" z="50000" name="DS19"/>
-            <incoming_comms_text from="DS19">
-            We are glad to see you! You are cleared for docking, crew standing by. Our security chief is waiting to brief you on the current situation.
-			</incoming_comms_text>
-		
-	</event>	
-	<!-- ONCE CONSUMED, DO NOT ALLOW RECREATION OF NAMED OBJECT  -->
-	<event name_arme="CreateGrid00NamedObjectsConsumed">
-		<if_variable name="IsCreate" comparator="EQUALS" value="0" />
-		<if_variable name="x" comparator="EQUALS" value="2" />
-		<if_variable name="z" comparator="EQUALS" value="27" />
-		<if_variable name="IsExist-DS19" comparator="EQUALS" value="1" />
-		<if_not_exists name="DS19" />
-			<set_variable name="IsExist-DS19" value="0" />
-			<incoming_comms_text from="Crew member with telepathy">
-            I just felt a great disturbance, as if 13,000 voices suddenly cried out in terror and were suddenly silenced. I fear something terrible has happened.
-			</incoming_comms_text>
-	</event>		
-	
 	
     <!-- Sector 2,27 where the create and destroy pattern becomes active when transitioned -->
 	<event name_arme="CreateGrid2_27">   
@@ -668,7 +725,8 @@
 		<if_variable name="z" comparator="EQUALS" value="27" />
 		<!-- This is where all the objects are created and configured -->
 		
-		
+		<create count="30" type="asteroids" startX="89825.0" startY="0.0" startZ="11380.0" endX="76123.0" endY="0.0" endZ="30953.0" randomRange="5941" />
+		<create count="10" type="asteroids" startX="75822.0" startY="0.0" startZ="28845.0" endX="61067.0" endY="0.0" endZ="38180.0" randomRange="4153" />
 		<set_variable name="IsCreate" value="0" />
 	</event>
 	<event name_arme="DestroyGrid2_27"> 
@@ -676,13 +734,12 @@
 		<if_variable name="destroy_x" comparator="EQUALS" value="2" />
 		<if_variable name="destroy_z" comparator="EQUALS" value="27" />
 			<!-- This is where all the objects are destroyed in the sector. -->
-			<destroy name="DS19" />
+			<!-- <destroy name="DS19" /> -->
 
 			<!-- Flag the creation of a new sector if an event name_arme exists. -->
 			<set_variable name="IsDestroy" value="0" />
 			<set_variable name="IsCreate" value="1" />
 	</event>
-
 
 	
     <!-- END SECTOR DEFINITION, CREATION AND DESTRUCTION -->
@@ -755,7 +812,7 @@
 		<create type="enemy" raceKeys="friendly" hullKeys="light" use_gm_position="yes" angle="90" fleetnumber="-1"/>
 		<create type="enemy" raceKeys="friendly" hullKeys="medium" use_gm_position="yes" angle="90" fleetnumber="-1"/>
 		<create type="enemy" raceKeys="friendly" hullKeys="heavy" use_gm_position="yes" angle="90" fleetnumber="-1"/>
-    </event>
+   	</event>
 	
 	
 	
@@ -780,7 +837,7 @@
 	</event>
 	<!-- END BLOCK FOR LOCKING AND UNLOCKING FOR TRANSITION -->
  
-	
+ 	
 	<!-- BEGIN BLOCK FOR TRANSITION -->
 	
 	<!-- When the vessel moves out of the sector on the left side, it will appear on the right side -->
@@ -788,14 +845,14 @@
 	 <if_variable name="IsSectorLocked" comparator="EQUALS" value="0" />
 	 <if_object_property name="Artemis" property="positionX" comparator="GREATER" value="99990"/>
 	 <set_object_property property="positionX" name="Artemis" value="100"/>
-     <!-- Initiate the destroy pattern by setting the flag and recording the current sector position -->
+    	 <!-- Initiate the destroy pattern by setting the flag and recording the current sector position -->
 	 <set_variable name="IsDestroy" value="1" />	 
 	 <set_variable name="destroy_x" value="x" />
 	 <set_variable name="destroy_z" value="z" />
-     <!-- This records the next sector, once the destroy pattern finishes, the create pattern will start using the new coordinates. -->
+    	 <!-- This records the next sector, once the destroy pattern finishes, the create pattern will start using the new coordinates. -->
 	 <set_variable name="x" value="x-1" />
 
-     <destroy_near type="all" radius="100000" centerX="50000" centerY="0.0" centerZ="50000" />
+     	 <destroy_near type="all" radius="100000" centerX="50000" centerY="0.0" centerZ="50000" />
 	 
 	 <!-- Comms gets a message for current sector location -->
 	 <incoming_comms_text from="DSTAN AND ONBOARD NAV">Current position (|x|, |z|)</incoming_comms_text>
@@ -813,7 +870,7 @@
 	 <!-- This records the next sector, once the destroy pattern finishes, the create pattern will start using the new coordinates. -->		 
 	 <set_variable name="z" value="z-1" />
 
-     <destroy_near type="all" radius="100000" centerX="50000" centerY="0.0" centerZ="50000" />
+     		<destroy_near type="all" radius="100000" centerX="50000" centerY="0.0" centerZ="50000" />
 	 
 	 <!-- Comms gets a message for current sector location -->
 	 <incoming_comms_text from="DSTAN AND ONBOARD NAV">Current position (|x|, |z|)</incoming_comms_text>
@@ -829,7 +886,7 @@
 	 <set_variable name="destroy_z" value="z" />	 
 	 <set_variable name="x" value="x+1" />
 	 
-     <destroy_near type="all" radius="100000" centerX="50000" centerY="0.0" centerZ="50000" />
+     		<destroy_near type="all" radius="100000" centerX="50000" centerY="0.0" centerZ="50000" />
 	 
 	 <incoming_comms_text from="DSTAN AND ONBOARD NAV">Current position (|x|, |z|)</incoming_comms_text>
 	</event>
@@ -844,7 +901,7 @@
 	 <set_variable name="destroy_z" value="z" />	 
 	 <set_variable name="z" value="z+1" />	 
 
-     <destroy_near type="all" radius="100000" centerX="50000" centerY="0.0" centerZ="50000" />
+     		<destroy_near type="all" radius="100000" centerX="50000" centerY="0.0" centerZ="50000" />
 	 
 	 <incoming_comms_text from="DSTAN AND ONBOARD NAV">Current position (|x|, |z|)</incoming_comms_text>
 	</event>
