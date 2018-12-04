@@ -1,0 +1,39 @@
+A Comms Command Guide
+Getting started using the Object Oriented Language of a TSN class spaceships.
+December 4, 2018
+
+The line of code is entered into either in the Communication's Console or in the station selection menu where an input box is available when Communication is selected, but ready to play is not active.
+
+TRANSFER ENERGY
+new Energy.Transfer(String, String, integer); 
+public static void Energy.Transfer(String shipNameFrom, StringNameTo, integer unitsofEnergy);
+
+[Parameters]
+shipNameFrom: The name of the ship where the unitsofEnergy will transfer from.
+shipNameTo: The name of the ship where the unitsofEnergy will transfer to.
+unitsofEnergy: the integer value between 1-1000 to be transfered.
+
+[Example] 
+new Energy.Transfer("Artemis", "Intrepid", 200);  
+
+is where an static object's method is executed with the parameters noting the Artemis will transfer 200 units of energy to the Intrepid.
+
+[Remarks] You can only transfer what shipNameFrom has, you can only recieve a max 1000 units. Transfer anymore and it will be lost. There can be lost for energy transfer and will vary per environments and other factors. So a transfer of 200 units may only send 180 to 190. Your ships needs to be within 100 distance units radius from each other for transfer to work.
+
+EMERGENCY DAMCON HOLOGRAM
+new EmergencyDamConHologram.Activate(String);
+public static void EmergencyDamConHologram.Activate(String shipName)
+
+new EmergencyDamConHologram.EndProgram();
+public static void EmergencyDamConHologram.EndProgram();
+
+[Parameters]
+shipName: The name of the ship where the EDHs will appear.
+
+[Example]
+new EmergencyDamConHologram.Activate("Artemis");
+
+[Remarks] The EDHs has a limited amount of service time before their memory matrices are full. Ensure to deactive when not in use. 
+
+DISCLAIMER:
+In Real Life: This guide serves as a tool to learn about object oriented programming.
