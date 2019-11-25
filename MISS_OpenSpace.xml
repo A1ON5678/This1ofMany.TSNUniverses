@@ -52,8 +52,8 @@
 	<start>
 		<create type="player" x="50000" y="0" z="50000" angle="0" name="Artemis"/>
                 <!-- Starting sector -->
-		<set_variable name="x" value="2" integer="yes"/>
-                <set_variable name="z" value="2" integer="yes"/> 
+		<set_variable name="x" value="-20" integer="yes"/>
+                <set_variable name="z" value="-10" integer="yes"/> 
 		<!-- Sets the flag to create a sector based on the start position -->
 		<set_variable name="IsCreate" value="1" integer="yes"/>
 		
